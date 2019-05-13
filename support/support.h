@@ -106,6 +106,8 @@ extern const char support_install_prefix[];
 /* Corresponds to the install's lib/ or lib64/ directory.  */
 extern const char support_libdir_prefix[];
 
+extern const char support_install_rootsbindir[];
+
 extern ssize_t support_copy_file_range (int, off64_t *, int, off64_t *,
 					size_t, unsigned int);
 

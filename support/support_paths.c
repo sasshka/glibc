@@ -57,3 +57,9 @@ const char support_libdir_prefix[] = LIBDIR_PATH;
 #else
 # error please -DLIBDIR_PATH=something in the Makefile
 #endif
+
+#ifdef ROOTSBINDIR_PATH
+const char support_install_rootsbindir[] = ROOTSBINDIR_PATH;
+#else
+# error please -DROOTSBINDIR_PATH=something in the Makefile
+#endif
