@@ -31,34 +31,20 @@
 #include <ftw.h>
 #include <stdint.h>
 
+#include <support/capture_subprocess.h>
 #include <support/check.h>
 #include <support/support.h>
 #include <support/xunistd.h>
 
 #include <dirent.h>
 
-static int
-display_info (const char *fpath, const struct stat *sb,
-              int tflag, struct FTW *ftwbuf)
-{
-  printf ("info: %-3s %2d %7jd   %-40s %d %s\n",
-          (tflag == FTW_D) ? "d" : (tflag == FTW_DNR) ? "dnr" :
-          (tflag == FTW_DP) ? "dp" : (tflag == FTW_F) ? "f" :
-          (tflag == FTW_NS) ? "ns" : (tflag == FTW_SL) ? "sl" :
-          (tflag == FTW_SLN) ? "sln" : "???",
-          ftwbuf->level, (intmax_t) sb->st_size,
-          fpath, ftwbuf->base, fpath + ftwbuf->base);
-  /* To tell nftw to continue.  */
-  return 0;
-}
-
 /* Run ldconfig with a corrupt aux-cache, in particular we test for size
    truncation that might happen if a previous ldconfig run failed or if
    there were storage or power issues while we were writing the file.
    We want ldconfig not to crash, and it should be able to do so by
    computing the expected size of the file (bug 18093).  */
-static int
-do_test (void)
+static void
+do_test_ldconfig (void *closure)
 {
   char *prog = xasprintf ("%s/ldconfig", support_install_rootsbindir);
   char *const args[] = { prog, NULL };
@@ -91,8 +77,6 @@ do_test (void)
           new_size = size * i / 4;
           if (truncate (path, new_size))
               FAIL_EXIT1 ("truncation failed: %m");
-          if (nftw (path, display_info, 1000, 0) == -1)
-              FAIL_EXIT1 ("nftw failed.");
 
           pid = xfork ();
           /* Verify that ldconfig can run with a truncated
@@ -111,6 +95,16 @@ do_test (void)
     }
 
   free (prog);
+}
+
+static int
+do_test (void)
+{
+
+  struct support_capture_subprocess result;
+  result = support_capture_subprocess (do_test_ldconfig, NULL);
+  support_capture_subprocess_check (&result, "ldconfig", 0, sc_allow_none);
+
   return 0;
 }
 
