@@ -842,11 +842,11 @@ static void do_pre_run_checks ( volatile ThreadState* tst )
    /* amd64 YMM regs must form an array, ie, have no holes in
       between. */
    vg_assert(
-      (offsetof(VexGuestAMD64State,guest_YMM16)
-       - offsetof(VexGuestAMD64State,guest_YMM0))
-      == (17/*#regs*/-1) * 32/*bytes per reg*/
+      (offsetof(VexGuestAMD64State,guest_ZMM32)
+       - offsetof(VexGuestAMD64State,guest_ZMM0))
+      == (33/*#regs*/-1) * 64/*bytes per reg*/
    );
-   vg_assert(VG_IS_16_ALIGNED(offsetof(VexGuestAMD64State,guest_YMM0)));
+   vg_assert(VG_IS_16_ALIGNED(offsetof(VexGuestAMD64State,guest_ZMM0)));
    vg_assert(VG_IS_8_ALIGNED(offsetof(VexGuestAMD64State,guest_FPREG)));
    vg_assert(16 == offsetof(VexGuestAMD64State,guest_RAX));
    vg_assert(VG_IS_8_ALIGNED(offsetof(VexGuestAMD64State,guest_RAX)));

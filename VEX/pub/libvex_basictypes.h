@@ -69,6 +69,13 @@ typedef  UInt  U128[4];
 /* Always 256 bits. */
 typedef  UInt  U256[8];
 
+/* Always 512 bits. */
+typedef  UInt  U512[16];
+
+/* Floating point. */
+typedef  float   Float;    /* IEEE754 single-precision (32-bit) value */
+typedef  double  Double;   /* IEEE754 double-precision (64-bit) value */
+
 /* A union for doing 128-bit vector primitives conveniently. */
 typedef
    union {
@@ -76,6 +83,7 @@ typedef
       UShort w16[8];
       UInt   w32[4];
       ULong  w64[2];
+      Double f64[2];
    }
    V128;
 
@@ -89,9 +97,20 @@ typedef
    }
    V256;
 
-/* Floating point. */
-typedef  float   Float;    /* IEEE754 single-precision (32-bit) value */
-typedef  double  Double;   /* IEEE754 double-precision (64-bit) value */
+/* A union for doing 512-bit vector primitives conveniently. */
+typedef
+   union {
+      UChar  w8[64];
+      UShort w16[32];
+      UInt   w32[16];
+      Int    ws32[16]; //signed
+      ULong  w64[8];
+      Long   ws64[8];
+      Double f64[8];
+      Float  f32[16];
+   }
+   V512;
+
 
 /* Bool is always 8 bits. */
 typedef  unsigned char  Bool;
@@ -148,6 +167,34 @@ typedef  unsigned long HWord;
     typedef HWord RegWord;
 #   define FMT_REGWORD "l"
 #endif
+
+/* Work with the layout of a floating point number. */
+typedef union {
+   Float float_val;
+   struct {
+      UInt mantissa: 23;
+      UInt exponent: 8;
+      UInt sign: 1;
+   } parts;
+} float_cast;
+
+typedef union {
+   Double double_val;
+   struct {
+      Long mantissa: 52;
+      UInt exponent: 11;
+      UInt sign: 1;
+   } parts;
+} double_cast;
+
+typedef union {
+   UInt u;
+   Float f;
+} type32;
+typedef union {
+   ULong u;
+   Double f;
+} type64;
 
 /* Set up VEX_HOST_WORDSIZE and VEX_REGPARM. */
 #undef VEX_HOST_WORDSIZE

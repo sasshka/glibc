@@ -1645,6 +1645,7 @@ static const HChar* show_hwcaps_amd64 ( UInt hwcaps )
       { VEX_HWCAPS_AMD64_SSSE3,  "ssse3"  },
       { VEX_HWCAPS_AMD64_AVX,    "avx"    },
       { VEX_HWCAPS_AMD64_AVX2,   "avx2"   },
+      { VEX_HWCAPS_AMD64_AVX512, "avx512" },
       { VEX_HWCAPS_AMD64_BMI,    "bmi"    },
       { VEX_HWCAPS_AMD64_F16C,   "f16c"   },
       { VEX_HWCAPS_AMD64_RDRAND, "rdrand" },
@@ -1954,11 +1955,12 @@ static void check_hwcaps ( VexArch arch, UInt hwcaps )
             orthogonal. */
 
          /* Throw out obviously stupid cases: */
-         Bool have_sse3  = (hwcaps & VEX_HWCAPS_AMD64_SSE3)  != 0;
-         Bool have_ssse3 = (hwcaps & VEX_HWCAPS_AMD64_SSSE3) != 0;
-         Bool have_avx   = (hwcaps & VEX_HWCAPS_AMD64_AVX)   != 0;
-         Bool have_bmi   = (hwcaps & VEX_HWCAPS_AMD64_BMI)   != 0;
-         Bool have_avx2  = (hwcaps & VEX_HWCAPS_AMD64_AVX2)  != 0;
+         Bool have_sse3  = (hwcaps & VEX_HWCAPS_AMD64_SSE3)    != 0;
+         Bool have_ssse3 = (hwcaps & VEX_HWCAPS_AMD64_SSSE3)   != 0;
+         Bool have_avx   = (hwcaps & VEX_HWCAPS_AMD64_AVX)     != 0;
+         Bool have_bmi   = (hwcaps & VEX_HWCAPS_AMD64_BMI)     != 0;
+         Bool have_avx2  = (hwcaps & VEX_HWCAPS_AMD64_AVX2)    != 0;
+         Bool have_avx512 = (hwcaps & VEX_HWCAPS_AMD64_AVX512) != 0;
 
          /* SSSE3 without SSE3 */
          if (have_ssse3 && !have_sse3)
@@ -1975,6 +1977,13 @@ static void check_hwcaps ( VexArch arch, UInt hwcaps )
          if (have_bmi && !have_avx)
             invalid_hwcaps(arch, hwcaps,
                            "Support for BMI requires AVX capabilities\n");
+         /* AVX-512 without AVX or AVX2 */
+         if (have_avx512 && !have_avx)
+            invalid_hwcaps(arch, hwcaps,
+                           "Support for AVX-512 requires AVX capabilities\n");
+         if (have_avx512 && !have_avx2)
+            invalid_hwcaps(arch, hwcaps,
+                           "Support for AVX-512 requires AVX2 capabilities\n");
          return;
       }
 

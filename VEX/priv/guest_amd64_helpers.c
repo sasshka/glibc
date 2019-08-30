@@ -2304,22 +2304,22 @@ void LibVEX_GuestAMD64_fxsave ( /*IN*/VexGuestAMD64State* gst,
            _dst[2] = _src[2]; _dst[3] = _src[3]; }   \
       while (0)
 
-   COPY_U128( xmm[0],  gst->guest_YMM0 );
-   COPY_U128( xmm[1],  gst->guest_YMM1 );
-   COPY_U128( xmm[2],  gst->guest_YMM2 );
-   COPY_U128( xmm[3],  gst->guest_YMM3 );
-   COPY_U128( xmm[4],  gst->guest_YMM4 );
-   COPY_U128( xmm[5],  gst->guest_YMM5 );
-   COPY_U128( xmm[6],  gst->guest_YMM6 );
-   COPY_U128( xmm[7],  gst->guest_YMM7 );
-   COPY_U128( xmm[8],  gst->guest_YMM8 );
-   COPY_U128( xmm[9],  gst->guest_YMM9 );
-   COPY_U128( xmm[10], gst->guest_YMM10 );
-   COPY_U128( xmm[11], gst->guest_YMM11 );
-   COPY_U128( xmm[12], gst->guest_YMM12 );
-   COPY_U128( xmm[13], gst->guest_YMM13 );
-   COPY_U128( xmm[14], gst->guest_YMM14 );
-   COPY_U128( xmm[15], gst->guest_YMM15 );
+   COPY_U128( xmm[0],  gst->guest_ZMM0 );
+   COPY_U128( xmm[1],  gst->guest_ZMM1 );
+   COPY_U128( xmm[2],  gst->guest_ZMM2 );
+   COPY_U128( xmm[3],  gst->guest_ZMM3 );
+   COPY_U128( xmm[4],  gst->guest_ZMM4 );
+   COPY_U128( xmm[5],  gst->guest_ZMM5 );
+   COPY_U128( xmm[6],  gst->guest_ZMM6 );
+   COPY_U128( xmm[7],  gst->guest_ZMM7 );
+   COPY_U128( xmm[8],  gst->guest_ZMM8 );
+   COPY_U128( xmm[9],  gst->guest_ZMM9 );
+   COPY_U128( xmm[10], gst->guest_ZMM10 );
+   COPY_U128( xmm[11], gst->guest_ZMM11 );
+   COPY_U128( xmm[12], gst->guest_ZMM12 );
+   COPY_U128( xmm[13], gst->guest_ZMM13 );
+   COPY_U128( xmm[14], gst->guest_ZMM14 );
+   COPY_U128( xmm[15], gst->guest_ZMM15 );
 #  undef COPY_U128
 }
 
@@ -2413,22 +2413,22 @@ VexEmNote LibVEX_GuestAMD64_fxrstor ( /*IN*/HWord fp_state,
            _dst[2] = _src[2]; _dst[3] = _src[3]; }   \
       while (0)
 
-   COPY_U128( gst->guest_YMM0, xmm[0] );
-   COPY_U128( gst->guest_YMM1, xmm[1] );
-   COPY_U128( gst->guest_YMM2, xmm[2] );
-   COPY_U128( gst->guest_YMM3, xmm[3] );
-   COPY_U128( gst->guest_YMM4, xmm[4] );
-   COPY_U128( gst->guest_YMM5, xmm[5] );
-   COPY_U128( gst->guest_YMM6, xmm[6] );
-   COPY_U128( gst->guest_YMM7, xmm[7] );
-   COPY_U128( gst->guest_YMM8, xmm[8] );
-   COPY_U128( gst->guest_YMM9, xmm[9] );
-   COPY_U128( gst->guest_YMM10, xmm[10] );
-   COPY_U128( gst->guest_YMM11, xmm[11] );
-   COPY_U128( gst->guest_YMM12, xmm[12] );
-   COPY_U128( gst->guest_YMM13, xmm[13] );
-   COPY_U128( gst->guest_YMM14, xmm[14] );
-   COPY_U128( gst->guest_YMM15, xmm[15] );
+   COPY_U128( gst->guest_ZMM0, xmm[0] );
+   COPY_U128( gst->guest_ZMM1, xmm[1] );
+   COPY_U128( gst->guest_ZMM2, xmm[2] );
+   COPY_U128( gst->guest_ZMM3, xmm[3] );
+   COPY_U128( gst->guest_ZMM4, xmm[4] );
+   COPY_U128( gst->guest_ZMM5, xmm[5] );
+   COPY_U128( gst->guest_ZMM6, xmm[6] );
+   COPY_U128( gst->guest_ZMM7, xmm[7] );
+   COPY_U128( gst->guest_ZMM8, xmm[8] );
+   COPY_U128( gst->guest_ZMM9, xmm[9] );
+   COPY_U128( gst->guest_ZMM10, xmm[10] );
+   COPY_U128( gst->guest_ZMM11, xmm[11] );
+   COPY_U128( gst->guest_ZMM12, xmm[12] );
+   COPY_U128( gst->guest_ZMM13, xmm[13] );
+   COPY_U128( gst->guest_ZMM14, xmm[14] );
+   COPY_U128( gst->guest_ZMM15, xmm[15] );
 
 #  undef COPY_U128
 
@@ -3449,6 +3449,182 @@ void amd64g_dirtyhelper_CPUID_avx2 ( VexGuestAMD64State* st,
 #  undef SET_ABCD
 }
 
+/* Claim to be the following AVX-512 capable CPU.
+
+   With the following change: claim that XSaveOpt is not available, by
+   cpuid(eax=0xD,ecx=1).eax[0] returns 0, compared to 1 on the real
+   CPU.  Consequently, programs that correctly observe these CPUID
+   values should only try to use 3 of the 8 XSave-family instructions:
+   XGETBV, XSAVE and XRSTOR.  In particular this avoids having to
+   implement the compacted or optimised save/restore variants.
+
+   vendor_id       : GenuineIntel
+   cpu family      : 6
+   model           : 87
+   model name      : Intel(R) Genuine Intel(R) CPU 0000 @ 1.30GHz
+   stepping	   : 1
+   microcode	   : 0xffff01a0
+   cpu MHz	   : 999.993
+   cache size	   : 1024 KB
+   physical id	   : 0
+   siblings	   : 256
+   core id	   : 0
+   cpu cores	   : 64
+   apicid	   : 0
+   initial apicid  : 0
+   fpu		   : yes
+   fpu_exception   : yes
+   cpuid level	   : 13
+   wp		   : yes
+   flags	   : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca
+                     cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht
+                     tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc
+                     arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc
+                     aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl
+                     est tm2 ssse3 fma cx16 xtpr pdcm sse4_1 sse4_2 x2apic
+                     movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand
+                     lahf_lm abm 3dnowprefetch epb fsgsbase tsc_adjust bmi1
+                     avx2 smep bmi2 erms avx512f rdseed adx avx512pf avx512er
+                     avx512cd xsaveopt dtherm ida arat pln pts
+   bugs	           :
+   bogomips	   : 2593.90
+   clflush size	   : 64
+   cache_alignment : 64
+   address sizes   : 46 bits physical, 48 bits virtual
+   power management:
+*/
+void amd64g_dirtyhelper_CPUID_avx512 ( VexGuestAMD64State* st )
+{
+#  define SET_ABCD(_a,_b,_c,_d)                \
+      do { st->guest_RAX = (ULong)(_a);        \
+           st->guest_RBX = (ULong)(_b);        \
+           st->guest_RCX = (ULong)(_c);        \
+           st->guest_RDX = (ULong)(_d);        \
+      } while (0);
+
+   UInt old_eax = (UInt)st->guest_RAX;
+   UInt old_ecx = (UInt)st->guest_RCX;
+
+   switch (old_eax) {
+      case 0x00000000:
+         SET_ABCD(0x0000000d, 0X756e6547, 0x6c65746e, 0x49656e69);
+         break;
+      case 0x00000001:
+         SET_ABCD(0x00050671, 0xedff0800, 0x7ff8f39f, 0xbfebfbff);
+         break;
+      case 0x00000002:
+         SET_ABCD(0x6c6b6a01, 0x00ff616d, 0x00000000, 0x00000000);
+         break;
+      case 0x00000003:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      case 0x00000004:
+         switch (old_ecx) {
+            case 0x00000000:
+               SET_ABCD(0xfc00c121, 0x01c0003f, 0x0000003f, 0x00000000);
+               break;
+            case 0x00000001:
+               SET_ABCD(0xfc00c122, 0x01c0003f, 0x0000003f, 0x00000000);
+               break;
+            case 0x00000002:
+               SET_ABCD(0xfc01c143, 0x03c0003f, 0x000003ff, 0x00000013);
+               break;
+            case 0x00000003:
+            default:
+               SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+               break;
+         }
+         break;
+      case 0x00000005:
+         SET_ABCD(0x00000040, 0x00000040, 0x00000003, 0x00000110);
+         break;
+      case 0x00000006:
+         SET_ABCD(0x00000077, 0x00000002, 0x00000009, 0x0000000);
+         break;
+      case 0x00000007:
+         switch (old_ecx) {
+            case 0x00000000:
+               SET_ABCD(0x00000000, 0x1c0d23ab, 0x00000001, 0x00000000);
+               break;
+            default:
+               SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+               break;
+         }
+         break;
+      case 0x00000008:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      case 0x00000009:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      case 0x0000000a:
+         SET_ABCD(0x07280203, 0x00000000, 0x00000000, 0x00000503);
+         break;
+      case 0x0000000b:
+         switch (old_ecx) {
+            case 0x00000000:
+               SET_ABCD(0x00000002, 0x00000004, 0x00000100, 0x000000e4);
+               break;
+            case 0x00000001:
+               SET_ABCD(0x00000009, 0x00000100, 0x00000201, 0x000000e4);
+               break;
+            default:
+               SET_ABCD(0x00000000, 0x00000000, old_ecx, 0x000000e4);
+               break;
+         }
+         break;
+      case 0x0000000c:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      case 0x0000000d:
+         switch (old_ecx) {
+            case 0x00000000:
+               SET_ABCD(0x000000e7, 0x00000a80, 0x00000a80, 0x00000000);
+               break;
+            case 0x00000001:
+               SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+               break;
+            case 0x00000002:
+               SET_ABCD(0x00000100, 0x00000240, 0x00000000, 0x00000000);
+               break;
+            default:
+               SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+               break;
+         }
+         break;
+      case 0x80000000:
+         SET_ABCD(0x80000008, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      case 0x80000001:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000021, 0x2c100800);
+         break;
+      case 0x80000002:
+         SET_ABCD(0x65746e49, 0x2952286c, 0x6e654720, 0x656e6975);
+         break;
+      case 0x80000003:
+         SET_ABCD(0x746e4920, 0x52286c65, 0x50432029, 0x30302055);
+         break;
+      case 0x80000004:
+         SET_ABCD(0x40203030, 0x332e3120, 0x7a484730, 0x00000000);
+         break;
+      case 0x80000005:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      case 0x80000006:
+         SET_ABCD(0x00000000, 0x00000000, 0x04008040, 0x00000000);
+         break;
+      case 0x80000007:
+         SET_ABCD(0x00000000, 0x00000000, 0x00000000, 0x00000100);
+         break;
+      case 0x80000008:
+         SET_ABCD(0x0000302e, 0x00000000, 0x00000000, 0x00000000);
+         break;
+      default:
+         SET_ABCD(0x000000e7, 0x00000a80, 0x00000a80, 0x00000000);
+         break;
+   }
+#  undef SET_ABCD
+}
 
 /*---------------------------------------------------------------*/
 /*--- Misc integer helpers, including rotates and crypto.     ---*/
@@ -4157,10 +4333,10 @@ ULong amd64g_dirtyhelper_PCMPxSTRx (
    // In all cases, the new OSZACP value is the lowest 16 of
    // the return value.
    if (isxSTRM) {
-      gst->guest_YMM0[0] = resV.w32[0];
-      gst->guest_YMM0[1] = resV.w32[1];
-      gst->guest_YMM0[2] = resV.w32[2];
-      gst->guest_YMM0[3] = resV.w32[3];
+      gst->guest_ZMM0[0] = resV.w32[0];
+      gst->guest_ZMM0[1] = resV.w32[1];
+      gst->guest_ZMM0[2] = resV.w32[2];
+      gst->guest_ZMM0[3] = resV.w32[3];
       return resOSZACP & 0x8D5;
    } else {
       UInt newECX = resV.w32[0] & 0xFFFF;
@@ -4550,28 +4726,46 @@ void LibVEX_GuestAMD64_initialise ( /*OUT*/VexGuestAMD64State* vex_state )
    amd64g_dirtyhelper_FINIT( vex_state );
 
    /* Initialise the AVX state. */
-#  define AVXZERO(_ymm) \
-      do { _ymm[0]=_ymm[1]=_ymm[2]=_ymm[3] = 0; \
-           _ymm[4]=_ymm[5]=_ymm[6]=_ymm[7] = 0; \
+#  define AVXZERO(_zmm) \
+      do { \
+         for (Int i = 0; i < 16; i++) { \
+            _zmm[i] = 0; \
+         } \
       } while (0)
    vex_state->guest_SSEROUND = (ULong)Irrm_NEAREST;
-   AVXZERO(vex_state->guest_YMM0);
-   AVXZERO(vex_state->guest_YMM1);
-   AVXZERO(vex_state->guest_YMM2);
-   AVXZERO(vex_state->guest_YMM3);
-   AVXZERO(vex_state->guest_YMM4);
-   AVXZERO(vex_state->guest_YMM5);
-   AVXZERO(vex_state->guest_YMM6);
-   AVXZERO(vex_state->guest_YMM7);
-   AVXZERO(vex_state->guest_YMM8);
-   AVXZERO(vex_state->guest_YMM9);
-   AVXZERO(vex_state->guest_YMM10);
-   AVXZERO(vex_state->guest_YMM11);
-   AVXZERO(vex_state->guest_YMM12);
-   AVXZERO(vex_state->guest_YMM13);
-   AVXZERO(vex_state->guest_YMM14);
-   AVXZERO(vex_state->guest_YMM15);
-   AVXZERO(vex_state->guest_YMM16);
+   AVXZERO(vex_state->guest_ZMM0);
+   AVXZERO(vex_state->guest_ZMM1);
+   AVXZERO(vex_state->guest_ZMM2);
+   AVXZERO(vex_state->guest_ZMM3);
+   AVXZERO(vex_state->guest_ZMM4);
+   AVXZERO(vex_state->guest_ZMM5);
+   AVXZERO(vex_state->guest_ZMM6);
+   AVXZERO(vex_state->guest_ZMM7);
+   AVXZERO(vex_state->guest_ZMM8);
+   AVXZERO(vex_state->guest_ZMM9);
+   AVXZERO(vex_state->guest_ZMM10);
+   AVXZERO(vex_state->guest_ZMM11);
+   AVXZERO(vex_state->guest_ZMM12);
+   AVXZERO(vex_state->guest_ZMM13);
+   AVXZERO(vex_state->guest_ZMM14);
+   AVXZERO(vex_state->guest_ZMM15);
+   AVXZERO(vex_state->guest_ZMM16);
+   AVXZERO(vex_state->guest_ZMM17);
+   AVXZERO(vex_state->guest_ZMM18);
+   AVXZERO(vex_state->guest_ZMM19);
+   AVXZERO(vex_state->guest_ZMM20);
+   AVXZERO(vex_state->guest_ZMM21);
+   AVXZERO(vex_state->guest_ZMM22);
+   AVXZERO(vex_state->guest_ZMM23);
+   AVXZERO(vex_state->guest_ZMM24);
+   AVXZERO(vex_state->guest_ZMM25);
+   AVXZERO(vex_state->guest_ZMM26);
+   AVXZERO(vex_state->guest_ZMM27);
+   AVXZERO(vex_state->guest_ZMM28);
+   AVXZERO(vex_state->guest_ZMM29);
+   AVXZERO(vex_state->guest_ZMM30);
+   AVXZERO(vex_state->guest_ZMM31);
+   AVXZERO(vex_state->guest_ZMM32);
 
 #  undef AVXZERO
 

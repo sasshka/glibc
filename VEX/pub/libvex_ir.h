@@ -231,7 +231,8 @@ typedef
       Ity_D128,  /* 128-bit Decimal floating point */
       Ity_F128,  /* 128-bit floating point; implementation defined */
       Ity_V128,  /* 128-bit SIMD */
-      Ity_V256   /* 256-bit SIMD */
+      Ity_V256,  /* 256-bit SIMD */
+      Ity_V512   /* 512-bit SIMD */
    }
    IRType;
 
@@ -277,8 +278,10 @@ typedef
                     as a IEEE754 double value. */
       Ico_V128,  /* 128-bit restricted vector constant, with 1 bit
                     (repeated 8 times) for each of the 16 x 1-byte lanes */
-      Ico_V256   /* 256-bit restricted vector constant, with 1 bit
+      Ico_V256,  /* 256-bit restricted vector constant, with 1 bit
                     (repeated 8 times) for each of the 32 x 1-byte lanes */
+      Ico_V512   /* 512-bit restricted vector constant, with 1 bit
+                    (repeated 8 times) for each of the 64 x 1-byte lanes */
    }
    IRConstTag;
 
@@ -301,6 +304,7 @@ typedef
          ULong  F64i;
          UShort V128;   /* 16-bit value; see Ico_V128 comment above */
          UInt   V256;   /* 32-bit value; see Ico_V256 comment above */
+         ULong  V512;   /* 64-bit value; see Ico_V512 comment above */
       } Ico;
    }
    IRConst;
@@ -317,6 +321,7 @@ extern IRConst* IRConst_F64  ( Double );
 extern IRConst* IRConst_F64i ( ULong );
 extern IRConst* IRConst_V128 ( UShort );
 extern IRConst* IRConst_V256 ( UInt );
+extern IRConst* IRConst_V512 ( ULong );
 
 /* Deep-copy an IRConst */
 extern IRConst* deepCopyIRConst ( const IRConst* );
@@ -609,6 +614,11 @@ typedef
       Iop_CmpF64,
       Iop_CmpF32,
       Iop_CmpF128,
+
+      /* From AVX-512 subset */
+      Iop_ExtractExpF32, Iop_ExtractExpF64,
+      Iop_ExtractMantF32, Iop_ExtractMantF64,
+      Iop_FloatScaleF32, Iop_FloatScaleF64,
 
       /* --- Int to/from FP conversions. --- */
 
@@ -1442,6 +1452,9 @@ typedef
 
       /* unary */
       Iop_RecipEst32F0x4, Iop_Sqrt32F0x4, Iop_RSqrtEst32F0x4,
+      Iop_Recip14_32F0x4,
+      Iop_Recip28_32F0x4,
+      Iop_RSqrt28_32F0x4,
 
       /* --- 64x2 vector FP --- */
 
@@ -1488,6 +1501,9 @@ typedef
 
       /* unary */
       Iop_Sqrt64F0x2,
+      Iop_Recip28_64F0x2,
+      Iop_Recip14_64F0x2,
+      Iop_RSqrt28_64F0x2,
 
       /* --- pack / unpack --- */
 
@@ -1999,6 +2015,112 @@ typedef
       Iop_Max32Fx8, Iop_Min32Fx8,
       Iop_Max64Fx4, Iop_Min64Fx4,
       Iop_Rotx32, Iop_Rotx64,
+
+      /* ------------------ 512-bit SIMD Integer. ------------- */
+
+      Iop_AndV512, Iop_OrV512,
+      Iop_XorV512, Iop_NotV512,
+      Iop_Test32x16, Iop_Test64x8,
+      Iop_CmpNEZ32x16, Iop_CmpNEZ64x8,
+      Iop_Add32x16,   Iop_Add64x8,
+      Iop_Sub32x16,   Iop_Sub64x8,
+      Iop_Mul32x16,
+      Iop_Perm32x16, Iop_Perm64x8,
+      Iop_PermI32x16, Iop_PermI64x8,
+
+      /* Merge two vectors and shift them right by imm8 */
+      Iop_Align32x16,  Iop_Align64x8,
+      /*  Expand packed values using writemask */
+      Iop_Expand32x16, Iop_Expand64x8,
+      /* Compress packed values using control mask */
+      Iop_Compress32x16,  Iop_Compress64x8,
+      /* Bitwise ternary logic taking three source operands. The immediate
+       * value determines the specific binary function being implemented */
+      Iop_Ternlog32x16,   Iop_Ternlog64x8,
+
+      Iop_CmpEQ32x16,  Iop_CmpLE32x16,  Iop_CmpLT32x16,
+      Iop_CmpEQ32Ux16, Iop_CmpLE32Ux16, Iop_CmpLT32Ux16,
+      Iop_CmpEQ64x8,   Iop_CmpLE64x8,   Iop_CmpLT64x8,
+      Iop_CmpEQ64Ux8,  Iop_CmpLE64Ux8,  Iop_CmpLT64Ux8,
+      Iop_Cmp64x8, Iop_Cmp32x16,
+
+      Iop_ShlN16x32, Iop_ShlN32x16, Iop_ShlN64x8,
+      Iop_ShrN16x32, Iop_ShrN32x16, Iop_ShrN64x8,
+      Iop_SarN16x32, Iop_SarN32x16, Iop_SarN64x8,
+
+      Iop_Max32Sx16, Iop_Max64Sx8,
+      Iop_Max32Ux16, Iop_Max64Ux8,
+      Iop_Min32Sx16, Iop_Min64Sx8,
+      Iop_Min32Ux16, Iop_Min64Ux8,
+
+      /* Pack/unpack */
+      Iop_V256HLtoV512, // (V256,V256)->V512, first arg is most signif
+      Iop_V512toV256_0, // V512 -> V256, less significant lane
+      Iop_V512toV256_1, // V512 -> V256, more significant lane
+      /* Down convert packed integers */
+      Iop_32x16to8x16,  Iop_32Sx16to8Sx16,  Iop_32Ux16to8Ux16,
+      Iop_32x16to16x16, Iop_32Sx16to16Sx16, Iop_32Ux16to16Ux16,
+      Iop_64x8to8x8,  Iop_64Sx8to8Sx8,  Iop_64Ux8to8Ux8,
+      Iop_64x8to16x8, Iop_64Sx8to16Sx8, Iop_64Ux8to16Ux8,
+      Iop_64x8to32x8, Iop_64Sx8to32Sx8, Iop_64Ux8to32Ux8,
+
+      /* V512 -> I64, must be sequential */
+      Iop_V512to64_0, Iop_V512to64_1,
+      Iop_V512to64_2, Iop_V512to64_3,
+      Iop_V512to64_4, Iop_V512to64_5,
+      Iop_V512to64_6, Iop_V512to64_7,
+
+      Iop_RotateRight32x16, Iop_RotateRight64x8,
+      Iop_RotateLeft32x16,  Iop_RotateLeft64x8,
+      Iop_RotateRightV32x16, Iop_RotateRightV64x8,
+      Iop_RotateLeftV32x16,  Iop_RotateLeftV64x8,
+
+      /* Masking */
+      /* expand lowest-lane bits to vector elements, 0 -> 0x0..0, 1 -> 0xF..F */
+      Iop_ExpandBitsTo32x4, Iop_ExpandBitsTo64x2,
+      Iop_ExpandBitsTo32x8, Iop_ExpandBitsTo64x4,
+      Iop_ExpandBitsTo32x16, Iop_ExpandBitsTo64x8,
+      Iop_ExpandBitsTo8x16, Iop_ExpandBitsTo16x8,
+      Iop_ExpandBitsTo16x16,
+
+      /* Detect duplicate values. Compare each element of the source vector
+       * for equality with all other elements closer to the least significant one,
+       * combine the comparison results to a bit vector */
+      Iop_Duplicates32x16, Iop_Duplicates64x8,
+      /* Count leading zeros */
+      Iop_Clz32x16, Iop_Clz64x8,
+
+      /* ------------------ 512-bit SIMD FP. ------------------ */
+      Iop_Max32Fx16, Iop_Min32Fx16,
+      Iop_Max64Fx8, Iop_Min64Fx8,
+      Iop_Add64Fx8, Iop_Sub64Fx8, Iop_Mul64Fx8, Iop_Div64Fx8,
+      Iop_Add32Fx16, Iop_Sub32Fx16, Iop_Mul32Fx16, Iop_Div32Fx16,
+      Iop_Sqrt64Fx8,
+      Iop_Sqrt32Fx16,
+
+      Iop_Recip28_64Fx8, Iop_Recip28_32Fx16,
+      Iop_RSqrt28_64Fx8, Iop_RSqrt28_32Fx16,
+      Iop_Recip14_32Fx16, Iop_Recip14_64Fx8,
+      Iop_ExpEst32Fx16, Iop_ExpEst64Fx8,
+
+      Iop_FixupImm32, Iop_FixupImm32x16,
+      Iop_FixupImm64, Iop_FixupImm64x8,
+      Iop_Scale32Fx16, Iop_Scale64Fx8,
+      Iop_RoundScaleF32, Iop_RoundScaleF64,
+      Iop_RoundScale32Fx16, Iop_RoundScale64Fx8,
+
+      Iop_CvtF32toU32,         Iop_CvtF32toU64,
+      Iop_CvtF64toU32,         Iop_CvtF64toU64,
+      Iop_Cvt32Fx16toUDQ,      Iop_Cvt64Fx8toUDQ,
+      Iop_CvtUDQto32Fx16, Iop_CvtUDQto64Fx8,
+      Iop_CvtU32toF32,    Iop_CvtU32toF64,
+      Iop_CvtU64toF32,    Iop_CvtU64toF64,
+      Iop_Cvt16Fx16to32Fx16, Iop_Cvt32Fx16to16Fx16,
+      Iop_InterleaveHI32x8, Iop_InterleaveHI64x4,
+
+      Iop_ExtractExp32Fx16, Iop_ExtractMant32Fx16,
+      Iop_ExtractExp64Fx8, Iop_ExtractMant64Fx8,
+
       Iop_LAST      /* must be the last enumerator */
    }
    IROp;

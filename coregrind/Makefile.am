@@ -619,6 +619,9 @@ GDBSERVER_XML_FILES = \
 	m_gdbserver/64bit-avx-valgrind-s2.xml \
 	m_gdbserver/64bit-avx-valgrind-s1.xml \
 	m_gdbserver/64bit-avx.xml \
+	m_gdbserver/64bit-avx512-valgrind-s2.xml \
+	m_gdbserver/64bit-avx512-valgrind-s1.xml \
+	m_gdbserver/64bit-avx512.xml \
 	m_gdbserver/64bit-core-valgrind-s1.xml \
 	m_gdbserver/64bit-core-valgrind-s2.xml \
 	m_gdbserver/64bit-core.xml \

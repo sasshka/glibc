@@ -1256,10 +1256,10 @@ static Bool modify_ignore_ranges ( Bool addRange, Addr start, Addr len )
 
 static
 __attribute__((noinline))
-void mc_LOADV_128_or_256_slow ( /*OUT*/ULong* res,
+void mc_LOADV_128_or_256_or_512_slow ( /*OUT*/ULong* res,
                                 Addr a, SizeT nBits, Bool bigendian )
 {
-   ULong  pessim[4];     /* only used when p-l-ok=yes */
+   ULong  pessim[8];     /* only used when p-l-ok=yes */
    SSizeT szB            = nBits / 8;
    SSizeT szL            = szB / 8;  /* Size in Longs (64-bit units) */
    SSizeT i, j;          /* Must be signed. */
@@ -1294,7 +1294,7 @@ void mc_LOADV_128_or_256_slow ( /*OUT*/ULong* res,
       ULong pessim64   = V_BITS64_DEFINED;
       UWord long_index = byte_offset_w(szL, bigendian, j);
       for (i = 8-1; i >= 0; i--) {
-         PROF_EVENT(MCPE_LOADV_128_OR_256_SLOW_LOOP);
+         PROF_EVENT(MCPE_LOADV_128_OR_256_OR_512_SLOW_LOOP);
          ai = a + 8*long_index + byte_offset_w(8, bigendian, i);
          ok = get_vbits8(ai, &vbits8);
          vbits64 <<= 8;
@@ -4523,7 +4523,7 @@ static UInt mb_get_origin_for_guest_offset ( ThreadId tid,
 static void mc_post_reg_write ( CorePart part, ThreadId tid, 
                                 PtrdiffT offset, SizeT size)
 {
-#  define MAX_REG_WRITE_SIZE 1744
+#  define MAX_REG_WRITE_SIZE 3072
    UChar area[MAX_REG_WRITE_SIZE];
    tl_assert(size <= MAX_REG_WRITE_SIZE);
    VG_(memset)(area, V_BITS8_DEFINED, size);
@@ -4801,13 +4801,13 @@ STATIC_ASSERT(V_BITS8_UNDEFINED == 0xFF);
 /*------------------------------------------------------------*/
 
 static INLINE
-void mc_LOADV_128_or_256 ( /*OUT*/ULong* res,
+void mc_LOADV_128_or_256_or_512 ( /*OUT*/ULong* res,
                            Addr a, SizeT nBits, Bool isBigEndian )
 {
-   PROF_EVENT(MCPE_LOADV_128_OR_256);
+   PROF_EVENT(MCPE_LOADV_128_OR_256_OR_512);
 
 #ifndef PERF_FAST_LOADV
-   mc_LOADV_128_or_256_slow( res, a, nBits, isBigEndian );
+   mc_LOADV_128_or_256_or_512_slow( res, a, nBits, isBigEndian );
    return;
 #else
    {
@@ -4817,8 +4817,8 @@ void mc_LOADV_128_or_256 ( /*OUT*/ULong* res,
       SecMap* sm;
 
       if (UNLIKELY( UNALIGNED_OR_HIGH(a,nBits) )) {
-         PROF_EVENT(MCPE_LOADV_128_OR_256_SLOW1);
-         mc_LOADV_128_or_256_slow( res, a, nBits, isBigEndian );
+         PROF_EVENT(MCPE_LOADV_128_OR_256_OR_512_SLOW1);
+         mc_LOADV_128_or_256_or_512_slow( res, a, nBits, isBigEndian );
          return;
       }
 
@@ -4838,8 +4838,8 @@ void mc_LOADV_128_or_256 ( /*OUT*/ULong* res,
          } else {
             /* Slow case: some block of 8 bytes are not all-defined or
                all-undefined. */
-            PROF_EVENT(MCPE_LOADV_128_OR_256_SLOW2);
-            mc_LOADV_128_or_256_slow( res, a, nBits, isBigEndian );
+            PROF_EVENT(MCPE_LOADV_128_OR_256_OR_512_SLOW2);
+            mc_LOADV_128_or_256_or_512_slow( res, a, nBits, isBigEndian );
             return;
          }
       }
@@ -4848,22 +4848,29 @@ void mc_LOADV_128_or_256 ( /*OUT*/ULong* res,
 #endif
 }
 
+VG_REGPARM(2) void MC_(helperc_LOADV512le) ( /*OUT*/V512* res, Addr a ) {
+   mc_LOADV_128_or_256_or_512(&res->w64[0], a, 512, True);
+}
+VG_REGPARM(2) void MC_(helperc_LOADV512be) ( /*OUT*/V512* res, Addr a ) {
+   mc_LOADV_128_or_256_or_512(&res->w64[0], a, 512, True);
+}
+
 VG_REGPARM(2) void MC_(helperc_LOADV256be) ( /*OUT*/V256* res, Addr a )
 {
-   mc_LOADV_128_or_256(&res->w64[0], a, 256, True);
+   mc_LOADV_128_or_256_or_512(&res->w64[0], a, 256, True);
 }
 VG_REGPARM(2) void MC_(helperc_LOADV256le) ( /*OUT*/V256* res, Addr a )
 {
-   mc_LOADV_128_or_256(&res->w64[0], a, 256, False);
+   mc_LOADV_128_or_256_or_512(&res->w64[0], a, 256, False);
 }
 
 VG_REGPARM(2) void MC_(helperc_LOADV128be) ( /*OUT*/V128* res, Addr a )
 {
-   mc_LOADV_128_or_256(&res->w64[0], a, 128, True);
+   mc_LOADV_128_or_256_or_512(&res->w64[0], a, 128, True);
 }
 VG_REGPARM(2) void MC_(helperc_LOADV128le) ( /*OUT*/V128* res, Addr a )
 {
-   mc_LOADV_128_or_256(&res->w64[0], a, 128, False);
+   mc_LOADV_128_or_256_or_512(&res->w64[0], a, 128, False);
 }
 
 /*------------------------------------------------------------*/
@@ -7269,10 +7276,10 @@ static const HChar* MC_(event_ctr_name)[MCPE_LAST] = {
    [MCPE_SET_ADDRESS_RANGE_PERMS_LOOP64K] = "set_address_range_perms(loop64K)",
    [MCPE_SET_ADDRESS_RANGE_PERMS_LOOP64K_FREE_DIST_SM] =
         "set_address_range_perms(loop64K-free-dist-sm)",
-   [MCPE_LOADV_128_OR_256_SLOW_LOOP] = "LOADV_128_or_256_slow(loop)",
-   [MCPE_LOADV_128_OR_256]       = "LOADV_128_or_256",
-   [MCPE_LOADV_128_OR_256_SLOW1] = "LOADV_128_or_256-slow1",
-   [MCPE_LOADV_128_OR_256_SLOW2] = "LOADV_128_or_256-slow2",
+   [MCPE_LOADV_128_OR_256_OR_512_SLOW_LOOP] = "LOADV_128_or_256_or_512_slow(loop)",
+   [MCPE_LOADV_128_OR_256_OR_512]       = "LOADV_128_or_256_or_512",
+   [MCPE_LOADV_128_OR_256_OR_512_SLOW1] = "LOADV_128_or_256_or_512-slow1",
+   [MCPE_LOADV_128_OR_256_OR_512_SLOW2] = "LOADV_128_or_256_or_512-slow2",
    [MCPE_LOADV64]        = "LOADV64",
    [MCPE_LOADV64_SLOW1]  = "LOADV64-slow1",
    [MCPE_LOADV64_SLOW2]  = "LOADV64-slow2",

@@ -100,23 +100,48 @@ typedef
          helpers can treat them as an array.  YMM16 is a fake reg used
          as an intermediary in handling aforementioned insns. */
       /* 208 */ULong guest_SSEROUND;
-      /* 216 */U256  guest_YMM0;
-      U256  guest_YMM1;
-      U256  guest_YMM2;
-      U256  guest_YMM3;
-      U256  guest_YMM4;
-      U256  guest_YMM5;
-      U256  guest_YMM6;
-      U256  guest_YMM7;
-      U256  guest_YMM8;
-      U256  guest_YMM9;
-      U256  guest_YMM10;
-      U256  guest_YMM11;
-      U256  guest_YMM12;
-      U256  guest_YMM13;
-      U256  guest_YMM14;
-      U256  guest_YMM15;
-      U256  guest_YMM16;
+      /* 216 */
+      U512 guest_ZMM0;
+      U512 guest_ZMM1;
+      U512 guest_ZMM2;
+      U512 guest_ZMM3;
+      U512 guest_ZMM4;
+      U512 guest_ZMM5;
+      U512 guest_ZMM6;
+      U512 guest_ZMM7;
+      U512 guest_ZMM8;
+      U512 guest_ZMM9;
+      U512 guest_ZMM10;
+      U512 guest_ZMM11;
+      U512 guest_ZMM12;
+      U512 guest_ZMM13;
+      U512 guest_ZMM14;
+      U512 guest_ZMM15;
+      U512 guest_ZMM16;
+      U512 guest_ZMM17;
+      U512 guest_ZMM18;
+      U512 guest_ZMM19;
+      U512 guest_ZMM20;
+      U512 guest_ZMM21;
+      U512 guest_ZMM22;
+      U512 guest_ZMM23;
+      U512 guest_ZMM24;
+      U512 guest_ZMM25;
+      U512 guest_ZMM26;
+      U512 guest_ZMM27;
+      U512 guest_ZMM28;
+      U512 guest_ZMM29;
+      U512 guest_ZMM30;
+      U512 guest_ZMM31;
+      U512 guest_ZMM32; //NULL
+      ULong guest_K0;
+      ULong guest_K1;
+      ULong guest_K2;
+      ULong guest_K3;
+      ULong guest_K4;
+      ULong guest_K5;
+      ULong guest_K6;
+      ULong guest_K7;
 
       /* FPU */
       /* Note.  Setting guest_FTOP to be ULong messes up the

@@ -95,22 +95,22 @@ static void x86_float_state64_from_vex(x86_float_state64_t *mach,
 {
    // DDD: #warning GrP fixme fp state
    // JRS: what about the YMMHI bits?  Are they important?
-   VG_(memcpy)(&mach->__fpu_xmm0,  &vex->guest_YMM0,   sizeof(mach->__fpu_xmm0));
-   VG_(memcpy)(&mach->__fpu_xmm1,  &vex->guest_YMM1,   sizeof(mach->__fpu_xmm1));
-   VG_(memcpy)(&mach->__fpu_xmm2,  &vex->guest_YMM2,   sizeof(mach->__fpu_xmm2));
-   VG_(memcpy)(&mach->__fpu_xmm3,  &vex->guest_YMM3,   sizeof(mach->__fpu_xmm3));
-   VG_(memcpy)(&mach->__fpu_xmm4,  &vex->guest_YMM4,   sizeof(mach->__fpu_xmm4));
-   VG_(memcpy)(&mach->__fpu_xmm5,  &vex->guest_YMM5,   sizeof(mach->__fpu_xmm5));
-   VG_(memcpy)(&mach->__fpu_xmm6,  &vex->guest_YMM6,   sizeof(mach->__fpu_xmm6));
-   VG_(memcpy)(&mach->__fpu_xmm7,  &vex->guest_YMM7,   sizeof(mach->__fpu_xmm7));
-   VG_(memcpy)(&mach->__fpu_xmm8,  &vex->guest_YMM8,   sizeof(mach->__fpu_xmm8));
-   VG_(memcpy)(&mach->__fpu_xmm9,  &vex->guest_YMM9,   sizeof(mach->__fpu_xmm9));
-   VG_(memcpy)(&mach->__fpu_xmm10, &vex->guest_YMM10,  sizeof(mach->__fpu_xmm10));
-   VG_(memcpy)(&mach->__fpu_xmm11, &vex->guest_YMM11,  sizeof(mach->__fpu_xmm11));
-   VG_(memcpy)(&mach->__fpu_xmm12, &vex->guest_YMM12,  sizeof(mach->__fpu_xmm12));
-   VG_(memcpy)(&mach->__fpu_xmm13, &vex->guest_YMM13,  sizeof(mach->__fpu_xmm13));
-   VG_(memcpy)(&mach->__fpu_xmm14, &vex->guest_YMM14,  sizeof(mach->__fpu_xmm14));
-   VG_(memcpy)(&mach->__fpu_xmm15, &vex->guest_YMM15,  sizeof(mach->__fpu_xmm15));
+   VG_(memcpy)(&mach->__fpu_xmm0,  &vex->guest_ZMM0,   sizeof(mach->__fpu_xmm0));
+   VG_(memcpy)(&mach->__fpu_xmm1,  &vex->guest_ZMM1,   sizeof(mach->__fpu_xmm1));
+   VG_(memcpy)(&mach->__fpu_xmm2,  &vex->guest_ZMM2,   sizeof(mach->__fpu_xmm2));
+   VG_(memcpy)(&mach->__fpu_xmm3,  &vex->guest_ZMM3,   sizeof(mach->__fpu_xmm3));
+   VG_(memcpy)(&mach->__fpu_xmm4,  &vex->guest_ZMM4,   sizeof(mach->__fpu_xmm4));
+   VG_(memcpy)(&mach->__fpu_xmm5,  &vex->guest_ZMM5,   sizeof(mach->__fpu_xmm5));
+   VG_(memcpy)(&mach->__fpu_xmm6,  &vex->guest_ZMM6,   sizeof(mach->__fpu_xmm6));
+   VG_(memcpy)(&mach->__fpu_xmm7,  &vex->guest_ZMM7,   sizeof(mach->__fpu_xmm7));
+   VG_(memcpy)(&mach->__fpu_xmm8,  &vex->guest_ZMM8,   sizeof(mach->__fpu_xmm8));
+   VG_(memcpy)(&mach->__fpu_xmm9,  &vex->guest_ZMM9,   sizeof(mach->__fpu_xmm9));
+   VG_(memcpy)(&mach->__fpu_xmm10, &vex->guest_ZMM10,  sizeof(mach->__fpu_xmm10));
+   VG_(memcpy)(&mach->__fpu_xmm11, &vex->guest_ZMM11,  sizeof(mach->__fpu_xmm11));
+   VG_(memcpy)(&mach->__fpu_xmm12, &vex->guest_ZMM12,  sizeof(mach->__fpu_xmm12));
+   VG_(memcpy)(&mach->__fpu_xmm13, &vex->guest_ZMM13,  sizeof(mach->__fpu_xmm13));
+   VG_(memcpy)(&mach->__fpu_xmm14, &vex->guest_ZMM14,  sizeof(mach->__fpu_xmm14));
+   VG_(memcpy)(&mach->__fpu_xmm15, &vex->guest_ZMM15,  sizeof(mach->__fpu_xmm15));
 }
 
 
@@ -189,22 +189,22 @@ static void x86_float_state64_to_vex(const x86_float_state64_t *mach,
 {
    // DDD: #warning GrP fixme fp state
    // JRS: what about the YMMHI bits?  Are they important?
-   VG_(memcpy)(&vex->guest_YMM0,  &mach->__fpu_xmm0,  sizeof(mach->__fpu_xmm0));
-   VG_(memcpy)(&vex->guest_YMM1,  &mach->__fpu_xmm1,  sizeof(mach->__fpu_xmm1));
-   VG_(memcpy)(&vex->guest_YMM2,  &mach->__fpu_xmm2,  sizeof(mach->__fpu_xmm2));
-   VG_(memcpy)(&vex->guest_YMM3,  &mach->__fpu_xmm3,  sizeof(mach->__fpu_xmm3));
-   VG_(memcpy)(&vex->guest_YMM4,  &mach->__fpu_xmm4,  sizeof(mach->__fpu_xmm4));
-   VG_(memcpy)(&vex->guest_YMM5,  &mach->__fpu_xmm5,  sizeof(mach->__fpu_xmm5));
-   VG_(memcpy)(&vex->guest_YMM6,  &mach->__fpu_xmm6,  sizeof(mach->__fpu_xmm6));
-   VG_(memcpy)(&vex->guest_YMM7,  &mach->__fpu_xmm7,  sizeof(mach->__fpu_xmm7));
-   VG_(memcpy)(&vex->guest_YMM8,  &mach->__fpu_xmm8,  sizeof(mach->__fpu_xmm8));
-   VG_(memcpy)(&vex->guest_YMM9,  &mach->__fpu_xmm9,  sizeof(mach->__fpu_xmm9));
-   VG_(memcpy)(&vex->guest_YMM10, &mach->__fpu_xmm10, sizeof(mach->__fpu_xmm10));
-   VG_(memcpy)(&vex->guest_YMM11, &mach->__fpu_xmm11, sizeof(mach->__fpu_xmm11));
-   VG_(memcpy)(&vex->guest_YMM12, &mach->__fpu_xmm12, sizeof(mach->__fpu_xmm12));
-   VG_(memcpy)(&vex->guest_YMM13, &mach->__fpu_xmm13, sizeof(mach->__fpu_xmm13));
-   VG_(memcpy)(&vex->guest_YMM14, &mach->__fpu_xmm14, sizeof(mach->__fpu_xmm14));
-   VG_(memcpy)(&vex->guest_YMM15, &mach->__fpu_xmm15, sizeof(mach->__fpu_xmm15));
+   VG_(memcpy)(&vex->guest_ZMM0,  &mach->__fpu_xmm0,  sizeof(mach->__fpu_xmm0));
+   VG_(memcpy)(&vex->guest_ZMM1,  &mach->__fpu_xmm1,  sizeof(mach->__fpu_xmm1));
+   VG_(memcpy)(&vex->guest_ZMM2,  &mach->__fpu_xmm2,  sizeof(mach->__fpu_xmm2));
+   VG_(memcpy)(&vex->guest_ZMM3,  &mach->__fpu_xmm3,  sizeof(mach->__fpu_xmm3));
+   VG_(memcpy)(&vex->guest_ZMM4,  &mach->__fpu_xmm4,  sizeof(mach->__fpu_xmm4));
+   VG_(memcpy)(&vex->guest_ZMM5,  &mach->__fpu_xmm5,  sizeof(mach->__fpu_xmm5));
+   VG_(memcpy)(&vex->guest_ZMM6,  &mach->__fpu_xmm6,  sizeof(mach->__fpu_xmm6));
+   VG_(memcpy)(&vex->guest_ZMM7,  &mach->__fpu_xmm7,  sizeof(mach->__fpu_xmm7));
+   VG_(memcpy)(&vex->guest_ZMM8,  &mach->__fpu_xmm8,  sizeof(mach->__fpu_xmm8));
+   VG_(memcpy)(&vex->guest_ZMM9,  &mach->__fpu_xmm9,  sizeof(mach->__fpu_xmm9));
+   VG_(memcpy)(&vex->guest_ZMM10, &mach->__fpu_xmm10, sizeof(mach->__fpu_xmm10));
+   VG_(memcpy)(&vex->guest_ZMM11, &mach->__fpu_xmm11, sizeof(mach->__fpu_xmm11));
+   VG_(memcpy)(&vex->guest_ZMM12, &mach->__fpu_xmm12, sizeof(mach->__fpu_xmm12));
+   VG_(memcpy)(&vex->guest_ZMM13, &mach->__fpu_xmm13, sizeof(mach->__fpu_xmm13));
+   VG_(memcpy)(&vex->guest_ZMM14, &mach->__fpu_xmm14, sizeof(mach->__fpu_xmm14));
+   VG_(memcpy)(&vex->guest_ZMM15, &mach->__fpu_xmm15, sizeof(mach->__fpu_xmm15));
 }
 
 

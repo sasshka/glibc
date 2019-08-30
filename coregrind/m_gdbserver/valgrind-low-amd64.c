@@ -101,22 +101,98 @@ static struct reg regs[] = {
 #if defined(VGO_linux)
   { "orig_rax", 4288, 64 },
 #endif
-  { "ymm0h", 4352, 128 }, // The ymm?h registers only to be given to GDB
-  { "ymm1h", 4480, 128 }, // if Valgrind is running with AVX instructions.
-  { "ymm2h", 4608, 128 },
-  { "ymm3h", 4736, 128 },
-  { "ymm4h", 4864, 128 },
-  { "ymm5h", 4992, 128 },
-  { "ymm6h", 5120, 128 },
-  { "ymm7h", 5248, 128 },
-  { "ymm8h", 5376, 128 },
-  { "ymm9h", 5504, 128 },
-  { "ymm10h", 5632, 128 },
-  { "ymm11h", 5760, 128 },
-  { "ymm12h", 5888, 128 },
-  { "ymm13h", 6016, 128 },
-  { "ymm14h", 6144, 128 },
-  { "ymm15h", 6272, 128 }
+  /*
+  { "fs_base", 4352, 64 },
+  { "gs_base", 4416, 64 },
+  */
+  { "ymm0h", 4480, 128 },
+  { "ymm1h", 4608, 128 },
+  { "ymm2h", 4736, 128 },
+  { "ymm3h", 4864, 128 },
+  { "ymm4h", 4992, 128 },
+  { "ymm5h", 5120, 128 },
+  { "ymm6h", 5248, 128 },
+  { "ymm7h", 5376, 128 },
+  { "ymm8h", 5504, 128 },
+  { "ymm9h", 5632, 128 },
+  { "ymm10h", 5760, 128 },
+  { "ymm11h", 5888, 128 },
+  { "ymm12h", 6016, 128 },
+  { "ymm13h", 6144, 128 },
+  { "ymm14h", 6272, 128 },
+  { "ymm15h", 6400, 128 },
+  { "xmm16", 6528, 128 },
+  { "xmm17", 6656, 128 },
+  { "xmm18", 6784, 128 },
+  { "xmm19", 6912, 128 },
+  { "xmm20", 7040, 128 },
+  { "xmm21", 7168, 128 },
+  { "xmm22", 7296, 128 },
+  { "xmm23", 7424, 128 },
+  { "xmm24", 7552, 128 },
+  { "xmm25", 7680, 128 },
+  { "xmm26", 7808, 128 },
+  { "xmm27", 7936, 128 },
+  { "xmm28", 8064, 128 },
+  { "xmm29", 8192, 128 },
+  { "xmm30", 8320, 128 },
+  { "xmm31", 8448, 128 },
+  { "ymm16h", 8576, 128 },
+  { "ymm17h", 8704, 128 },
+  { "ymm18h", 8832, 128 },
+  { "ymm19h", 8960, 128 },
+  { "ymm20h", 9088, 128 },
+  { "ymm21h", 9216, 128 },
+  { "ymm22h", 9344, 128 },
+  { "ymm23h", 9472, 128 },
+  { "ymm24h", 9600, 128 },
+  { "ymm25h", 9728, 128 },
+  { "ymm26h", 9856, 128 },
+  { "ymm27h", 9984, 128 },
+  { "ymm28h", 10112, 128 },
+  { "ymm29h", 10240, 128 },
+  { "ymm30h", 10368, 128 },
+  { "ymm31h", 10496, 128 },
+  { "k0", 10624, 64 },
+  { "k1", 10688, 64 },
+  { "k2", 10752, 64 },
+  { "k3", 10816, 64 },
+  { "k4", 10880, 64 },
+  { "k5", 10944, 64 },
+  { "k6", 11008, 64 },
+  { "k7", 11072, 64 },
+  { "zmm0h", 11136, 256 },
+  { "zmm1h", 11392, 256 },
+  { "zmm2h", 11648, 256 },
+  { "zmm3h", 11904, 256 },
+  { "zmm4h", 12160, 256 },
+  { "zmm5h", 12416, 256 },
+  { "zmm6h", 12672, 256 },
+  { "zmm7h", 12928, 256 },
+  { "zmm8h", 13184, 256 },
+  { "zmm9h", 13440, 256 },
+  { "zmm10h", 13696, 256 },
+  { "zmm11h", 13952, 256 },
+  { "zmm12h", 14208, 256 },
+  { "zmm13h", 14464, 256 },
+  { "zmm14h", 14720, 256 },
+  { "zmm15h", 14976, 256 },
+  { "zmm16h", 15232, 256 },
+  { "zmm17h", 15488, 256 },
+  { "zmm18h", 15744, 256 },
+  { "zmm19h", 16000, 256 },
+  { "zmm20h", 16256, 256 },
+  { "zmm21h", 16512, 256 },
+  { "zmm22h", 16768, 256 },
+  { "zmm23h", 17024, 256 },
+  { "zmm24h", 17280, 256 },
+  { "zmm25h", 17536, 256 },
+  { "zmm26h", 17792, 256 },
+  { "zmm27h", 18048, 256 },
+  { "zmm28h", 18304, 256 },
+  { "zmm29h", 18560, 256 },
+  { "zmm30h", 18816, 256 },
+  { "zmm31h", 19072, 256 }
 };
 static const char *expedite_regs[] = { "rbp", "rsp", "rip", 0 };
 #define max_num_regs (sizeof (regs) / sizeof (regs[0]))
@@ -259,22 +335,22 @@ void transfer_register (ThreadId tid, int abs_regno, void * buf,
    case 37: *mod = False; break; // GDBTD ??? equivalent of foseg
    case 38: *mod = False; break; // GDBTD ??? equivalent of fooff
    case 39: *mod = False; break; // GDBTD ??? equivalent of fop
-   case 40: VG_(transfer) (&amd64->guest_YMM0[0],  buf, dir, size, mod); break;
-   case 41: VG_(transfer) (&amd64->guest_YMM1[0],  buf, dir, size, mod); break;
-   case 42: VG_(transfer) (&amd64->guest_YMM2[0],  buf, dir, size, mod); break;
-   case 43: VG_(transfer) (&amd64->guest_YMM3[0],  buf, dir, size, mod); break;
-   case 44: VG_(transfer) (&amd64->guest_YMM4[0],  buf, dir, size, mod); break;
-   case 45: VG_(transfer) (&amd64->guest_YMM5[0],  buf, dir, size, mod); break;
-   case 46: VG_(transfer) (&amd64->guest_YMM6[0],  buf, dir, size, mod); break;
-   case 47: VG_(transfer) (&amd64->guest_YMM7[0],  buf, dir, size, mod); break;
-   case 48: VG_(transfer) (&amd64->guest_YMM8[0],  buf, dir, size, mod); break;
-   case 49: VG_(transfer) (&amd64->guest_YMM9[0],  buf, dir, size, mod); break;
-   case 50: VG_(transfer) (&amd64->guest_YMM10[0], buf, dir, size, mod); break;
-   case 51: VG_(transfer) (&amd64->guest_YMM11[0], buf, dir, size, mod); break;
-   case 52: VG_(transfer) (&amd64->guest_YMM12[0], buf, dir, size, mod); break;
-   case 53: VG_(transfer) (&amd64->guest_YMM13[0], buf, dir, size, mod); break;
-   case 54: VG_(transfer) (&amd64->guest_YMM14[0], buf, dir, size, mod); break;
-   case 55: VG_(transfer) (&amd64->guest_YMM15[0], buf, dir, size, mod); break;
+   case 40: VG_(transfer) (&amd64->guest_ZMM0[0],  buf, dir, size, mod); break;
+   case 41: VG_(transfer) (&amd64->guest_ZMM1[0],  buf, dir, size, mod); break;
+   case 42: VG_(transfer) (&amd64->guest_ZMM2[0],  buf, dir, size, mod); break;
+   case 43: VG_(transfer) (&amd64->guest_ZMM3[0],  buf, dir, size, mod); break;
+   case 44: VG_(transfer) (&amd64->guest_ZMM4[0],  buf, dir, size, mod); break;
+   case 45: VG_(transfer) (&amd64->guest_ZMM5[0],  buf, dir, size, mod); break;
+   case 46: VG_(transfer) (&amd64->guest_ZMM6[0],  buf, dir, size, mod); break;
+   case 47: VG_(transfer) (&amd64->guest_ZMM7[0],  buf, dir, size, mod); break;
+   case 48: VG_(transfer) (&amd64->guest_ZMM8[0],  buf, dir, size, mod); break;
+   case 49: VG_(transfer) (&amd64->guest_ZMM9[0],  buf, dir, size, mod); break;
+   case 50: VG_(transfer) (&amd64->guest_ZMM10[0], buf, dir, size, mod); break;
+   case 51: VG_(transfer) (&amd64->guest_ZMM11[0], buf, dir, size, mod); break;
+   case 52: VG_(transfer) (&amd64->guest_ZMM12[0], buf, dir, size, mod); break;
+   case 53: VG_(transfer) (&amd64->guest_ZMM13[0], buf, dir, size, mod); break;
+   case 54: VG_(transfer) (&amd64->guest_ZMM14[0], buf, dir, size, mod); break;
+   case 55: VG_(transfer) (&amd64->guest_ZMM15[0], buf, dir, size, mod); break;
    case 56: 
       if (dir == valgrind_to_gdbserver) {
          // vex only models the rounding bits (see libvex_guest_x86.h)
@@ -286,22 +362,98 @@ void transfer_register (ThreadId tid, int abs_regno, void * buf,
       }
       break;
    case 57: *mod = False; break; // GDBTD???? VEX equivalent { "orig_rax"},
-   case 58: VG_(transfer) (&amd64->guest_YMM0[4],  buf, dir, size, mod); break;
-   case 59: VG_(transfer) (&amd64->guest_YMM1[4],  buf, dir, size, mod); break;
-   case 60: VG_(transfer) (&amd64->guest_YMM2[4],  buf, dir, size, mod); break;
-   case 61: VG_(transfer) (&amd64->guest_YMM3[4],  buf, dir, size, mod); break;
-   case 62: VG_(transfer) (&amd64->guest_YMM4[4],  buf, dir, size, mod); break;
-   case 63: VG_(transfer) (&amd64->guest_YMM5[4],  buf, dir, size, mod); break;
-   case 64: VG_(transfer) (&amd64->guest_YMM6[4],  buf, dir, size, mod); break;
-   case 65: VG_(transfer) (&amd64->guest_YMM7[4],  buf, dir, size, mod); break;
-   case 66: VG_(transfer) (&amd64->guest_YMM8[4],  buf, dir, size, mod); break;
-   case 67: VG_(transfer) (&amd64->guest_YMM9[4],  buf, dir, size, mod); break;
-   case 68: VG_(transfer) (&amd64->guest_YMM10[4], buf, dir, size, mod); break;
-   case 69: VG_(transfer) (&amd64->guest_YMM11[4], buf, dir, size, mod); break;
-   case 70: VG_(transfer) (&amd64->guest_YMM12[4], buf, dir, size, mod); break;
-   case 71: VG_(transfer) (&amd64->guest_YMM13[4], buf, dir, size, mod); break;
-   case 72: VG_(transfer) (&amd64->guest_YMM14[4], buf, dir, size, mod); break;
-   case 73: VG_(transfer) (&amd64->guest_YMM15[4], buf, dir, size, mod); break;
+   case 58: VG_(transfer) (&amd64->guest_ZMM0[4],  buf, dir, size, mod); break;
+   case 59: VG_(transfer) (&amd64->guest_ZMM1[4],  buf, dir, size, mod); break;
+   case 60: VG_(transfer) (&amd64->guest_ZMM2[4],  buf, dir, size, mod); break;
+   case 61: VG_(transfer) (&amd64->guest_ZMM3[4],  buf, dir, size, mod); break;
+   case 62: VG_(transfer) (&amd64->guest_ZMM4[4],  buf, dir, size, mod); break;
+   case 63: VG_(transfer) (&amd64->guest_ZMM5[4],  buf, dir, size, mod); break;
+   case 64: VG_(transfer) (&amd64->guest_ZMM6[4],  buf, dir, size, mod); break;
+   case 65: VG_(transfer) (&amd64->guest_ZMM7[4],  buf, dir, size, mod); break;
+   case 66: VG_(transfer) (&amd64->guest_ZMM8[4],  buf, dir, size, mod); break;
+   case 67: VG_(transfer) (&amd64->guest_ZMM9[4],  buf, dir, size, mod); break;
+   case 68: VG_(transfer) (&amd64->guest_ZMM10[4], buf, dir, size, mod); break;
+   case 69: VG_(transfer) (&amd64->guest_ZMM11[4], buf, dir, size, mod); break;
+   case 70: VG_(transfer) (&amd64->guest_ZMM12[4], buf, dir, size, mod); break;
+   case 71: VG_(transfer) (&amd64->guest_ZMM13[4], buf, dir, size, mod); break;
+   case 72: VG_(transfer) (&amd64->guest_ZMM14[4], buf, dir, size, mod); break;
+   case 73: VG_(transfer) (&amd64->guest_ZMM15[4], buf, dir, size, mod); break;
+   /* xmm16-31 */
+   case 74: VG_(transfer) (&amd64->guest_ZMM16[0], buf, dir, size, mod); break;
+   case 75: VG_(transfer) (&amd64->guest_ZMM17[0], buf, dir, size, mod); break;
+   case 76: VG_(transfer) (&amd64->guest_ZMM18[0], buf, dir, size, mod); break;
+   case 77: VG_(transfer) (&amd64->guest_ZMM19[0], buf, dir, size, mod); break;
+   case 78: VG_(transfer) (&amd64->guest_ZMM20[0], buf, dir, size, mod); break;
+   case 79: VG_(transfer) (&amd64->guest_ZMM21[0], buf, dir, size, mod); break;
+   case 80: VG_(transfer) (&amd64->guest_ZMM22[0], buf, dir, size, mod); break;
+   case 81: VG_(transfer) (&amd64->guest_ZMM23[0], buf, dir, size, mod); break;
+   case 82: VG_(transfer) (&amd64->guest_ZMM24[0], buf, dir, size, mod); break;
+   case 83: VG_(transfer) (&amd64->guest_ZMM25[0], buf, dir, size, mod); break;
+   case 84: VG_(transfer) (&amd64->guest_ZMM26[0], buf, dir, size, mod); break;
+   case 85: VG_(transfer) (&amd64->guest_ZMM27[0], buf, dir, size, mod); break;
+   case 86: VG_(transfer) (&amd64->guest_ZMM28[0], buf, dir, size, mod); break;
+   case 87: VG_(transfer) (&amd64->guest_ZMM29[0], buf, dir, size, mod); break;
+   case 88: VG_(transfer) (&amd64->guest_ZMM30[0], buf, dir, size, mod); break;
+   case 89: VG_(transfer) (&amd64->guest_ZMM31[0], buf, dir, size, mod); break;
+   /* ymm16-31 */
+   case 90: VG_(transfer) (&amd64->guest_ZMM16[4], buf, dir, size, mod); break;
+   case 91: VG_(transfer) (&amd64->guest_ZMM17[4], buf, dir, size, mod); break;
+   case 92: VG_(transfer) (&amd64->guest_ZMM18[4], buf, dir, size, mod); break;
+   case 93: VG_(transfer) (&amd64->guest_ZMM19[4], buf, dir, size, mod); break;
+   case 94: VG_(transfer) (&amd64->guest_ZMM20[4], buf, dir, size, mod); break;
+   case 95: VG_(transfer) (&amd64->guest_ZMM21[4], buf, dir, size, mod); break;
+   case 96: VG_(transfer) (&amd64->guest_ZMM22[4], buf, dir, size, mod); break;
+   case 97: VG_(transfer) (&amd64->guest_ZMM23[4], buf, dir, size, mod); break;
+   case 98: VG_(transfer) (&amd64->guest_ZMM24[4], buf, dir, size, mod); break;
+   case 99: VG_(transfer) (&amd64->guest_ZMM25[4], buf, dir, size, mod); break;
+   case 100: VG_(transfer) (&amd64->guest_ZMM26[4], buf, dir, size, mod); break;
+   case 101: VG_(transfer) (&amd64->guest_ZMM27[4], buf, dir, size, mod); break;
+   case 102: VG_(transfer) (&amd64->guest_ZMM28[4], buf, dir, size, mod); break;
+   case 103: VG_(transfer) (&amd64->guest_ZMM29[4], buf, dir, size, mod); break;
+   case 104: VG_(transfer) (&amd64->guest_ZMM30[4], buf, dir, size, mod); break;
+   case 105: VG_(transfer) (&amd64->guest_ZMM31[4], buf, dir, size, mod); break;
+   /* k */
+   case 106: VG_(transfer) (&amd64->guest_K0, buf, dir, size, mod); break;
+   case 107: VG_(transfer) (&amd64->guest_K1, buf, dir, size, mod); break;
+   case 108: VG_(transfer) (&amd64->guest_K2, buf, dir, size, mod); break;
+   case 109: VG_(transfer) (&amd64->guest_K3, buf, dir, size, mod); break;
+   case 110: VG_(transfer) (&amd64->guest_K4, buf, dir, size, mod); break;
+   case 111: VG_(transfer) (&amd64->guest_K5, buf, dir, size, mod); break;
+   case 112: VG_(transfer) (&amd64->guest_K6, buf, dir, size, mod); break;
+   case 113: VG_(transfer) (&amd64->guest_K7, buf, dir, size, mod); break;
+   /* zmm */
+   case 114: VG_(transfer) (&amd64->guest_ZMM0[8], buf, dir, size, mod); break;
+   case 115: VG_(transfer) (&amd64->guest_ZMM1[8], buf, dir, size, mod); break;
+   case 116: VG_(transfer) (&amd64->guest_ZMM2[8], buf, dir, size, mod); break;
+   case 117: VG_(transfer) (&amd64->guest_ZMM3[8], buf, dir, size, mod); break;
+   case 118: VG_(transfer) (&amd64->guest_ZMM4[8], buf, dir, size, mod); break;
+   case 119: VG_(transfer) (&amd64->guest_ZMM5[8], buf, dir, size, mod); break;
+   case 120: VG_(transfer) (&amd64->guest_ZMM6[8], buf, dir, size, mod); break;
+   case 121: VG_(transfer) (&amd64->guest_ZMM7[8], buf, dir, size, mod); break;
+   case 122: VG_(transfer) (&amd64->guest_ZMM8[8], buf, dir, size, mod); break;
+   case 123: VG_(transfer) (&amd64->guest_ZMM9[8], buf, dir, size, mod); break;
+   case 124: VG_(transfer) (&amd64->guest_ZMM10[8], buf, dir, size, mod); break;
+   case 125: VG_(transfer) (&amd64->guest_ZMM11[8], buf, dir, size, mod); break;
+   case 126: VG_(transfer) (&amd64->guest_ZMM12[8], buf, dir, size, mod); break;
+   case 127: VG_(transfer) (&amd64->guest_ZMM13[8], buf, dir, size, mod); break;
+   case 128: VG_(transfer) (&amd64->guest_ZMM14[8], buf, dir, size, mod); break;
+   case 129: VG_(transfer) (&amd64->guest_ZMM15[8], buf, dir, size, mod); break;
+   case 130: VG_(transfer) (&amd64->guest_ZMM16[8], buf, dir, size, mod); break;
+   case 131: VG_(transfer) (&amd64->guest_ZMM17[8], buf, dir, size, mod); break;
+   case 132: VG_(transfer) (&amd64->guest_ZMM18[8], buf, dir, size, mod); break;
+   case 133: VG_(transfer) (&amd64->guest_ZMM19[8], buf, dir, size, mod); break;
+   case 134: VG_(transfer) (&amd64->guest_ZMM20[8], buf, dir, size, mod); break;
+   case 135: VG_(transfer) (&amd64->guest_ZMM21[8], buf, dir, size, mod); break;
+   case 136: VG_(transfer) (&amd64->guest_ZMM22[8], buf, dir, size, mod); break;
+   case 137: VG_(transfer) (&amd64->guest_ZMM23[8], buf, dir, size, mod); break;
+   case 138: VG_(transfer) (&amd64->guest_ZMM24[8], buf, dir, size, mod); break;
+   case 139: VG_(transfer) (&amd64->guest_ZMM25[8], buf, dir, size, mod); break;
+   case 140: VG_(transfer) (&amd64->guest_ZMM26[8], buf, dir, size, mod); break;
+   case 141: VG_(transfer) (&amd64->guest_ZMM27[8], buf, dir, size, mod); break;
+   case 142: VG_(transfer) (&amd64->guest_ZMM28[8], buf, dir, size, mod); break;
+   case 143: VG_(transfer) (&amd64->guest_ZMM29[8], buf, dir, size, mod); break;
+   case 144: VG_(transfer) (&amd64->guest_ZMM30[8], buf, dir, size, mod); break;
+   case 145: VG_(transfer) (&amd64->guest_ZMM31[8], buf, dir, size, mod); break;
    default: vg_assert(0);
    }
 }
@@ -312,7 +464,15 @@ Bool have_avx(void)
    VexArch va;
    VexArchInfo vai;
    VG_(machine_get_VexArchInfo) (&va, &vai);
-   return (vai.hwcaps & VEX_HWCAPS_AMD64_AVX ? True : False);
+   return ((vai.hwcaps & VEX_HWCAPS_AMD64_AVX) ? True : False);
+}
+
+static
+Bool have_avx512(void) {
+   VexArch va;
+   VexArchInfo vai;
+   VG_(machine_get_VexArchInfo) (&va, &vai);
+   return ((vai.hwcaps & VEX_HWCAPS_AMD64_AVX512) ? True : False);
 }
 
 static
@@ -366,10 +526,14 @@ static struct valgrind_target_ops low_target = {
 void amd64_init_architecture (struct valgrind_target_ops *target)
 {
    *target = low_target;
-   if (have_avx())
-      dyn_num_regs = max_num_regs;
-   else
-      dyn_num_regs = max_num_regs - 16; // remove the AVX "high" registers.
+
+   dyn_num_regs = max_num_regs;
+   if (!have_avx512())
+      dyn_num_regs -= 72; // remove the AVX-512 registers.
+   if (!have_avx())
+      dyn_num_regs -= 16; // remove the AVX "high" registers.
+
+   dyn_num_regs = max_num_regs;
    target->num_regs = dyn_num_regs;
    set_register_cache (regs, dyn_num_regs);
    gdbserver_expedite_regs = expedite_regs;

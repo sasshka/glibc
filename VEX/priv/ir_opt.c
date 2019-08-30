@@ -1273,6 +1273,7 @@ static IRExpr* mkZeroOfPrimopResultType ( IROp op )
       case Iop_AndV128: return IRExpr_Const(IRConst_V128(0));
       case Iop_XorV256:
       case Iop_AndV256: return IRExpr_Const(IRConst_V256(0));
+      case Iop_AndV512: return IRExpr_Const(IRConst_V512(0));
       default: vpanic("mkZeroOfPrimopResultType: bad primop");
    }
 }
@@ -6552,7 +6553,7 @@ static void considerExpensives ( /*OUT*/Bool* hasGetIorPutI,
                case Ity_I32: case Ity_I64: case Ity_I128: 
                   break;
                case Ity_F16: case Ity_F32: case Ity_F64: case Ity_F128:
-               case Ity_V128: case Ity_V256:
+               case Ity_V128: case Ity_V256: case Ity_V512:
                   *hasVorFtemps = True;
                   break;
                case Ity_D32: case Ity_D64: case Ity_D128:

@@ -61,6 +61,7 @@ void ppIRType ( IRType ty )
       case Ity_D128:    vex_printf( "D128"); break;
       case Ity_V128:    vex_printf( "V128"); break;
       case Ity_V256:    vex_printf( "V256"); break;
+      case Ity_V512:    vex_printf( "V512"); break;
       default: vex_printf("ty = 0x%x\n", (UInt)ty);
                vpanic("ppIRType");
    }
@@ -86,6 +87,7 @@ void ppIRConst ( const IRConst* con )
       case Ico_F64i: vex_printf( "F64i{0x%llx}", con->Ico.F64i); break;
       case Ico_V128: vex_printf( "V128{0x%04x}", (UInt)(con->Ico.V128)); break;
       case Ico_V256: vex_printf( "V256{0x%08x}", con->Ico.V256); break;
+      case Ico_V512: vex_printf( "V512{0x%08llx}", con->Ico.V512); break;
       default: vpanic("ppIRConst");
    }
 }
@@ -1330,6 +1332,188 @@ void ppIROp ( IROp op )
 
       case Iop_PwBitMtxXpose64x2: vex_printf("BitMatrixTranspose64x2"); return;
 
+      case Iop_V512to64_0: vex_printf("V512to64_0"); return;
+      case Iop_V512to64_1: vex_printf("V512to64_1"); return;
+      case Iop_V512to64_2: vex_printf("V512to64_2"); return;
+      case Iop_V512to64_3: vex_printf("V512to64_3"); return;
+      case Iop_V512to64_4: vex_printf("V512to64_4"); return;
+      case Iop_V512to64_5: vex_printf("V512to64_5"); return;
+      case Iop_V512to64_6: vex_printf("V512to64_6"); return;
+      case Iop_V512to64_7: vex_printf("V512to64_7"); return;
+
+      case Iop_V256HLtoV512:  vex_printf("V256HLtoV512"); return;
+      case Iop_V512toV256_0:  vex_printf("V512toV256_0"); return;
+      case Iop_V512toV256_1:  vex_printf("V512toV256_1"); return;
+
+      case Iop_Add32x16:   vex_printf("Add32x16"); return;
+      case Iop_Sub32x16:   vex_printf("Sub32x16"); return;
+      case Iop_Mul32x16:   vex_printf("Mul32x16"); return;
+      case Iop_Add64x8:    vex_printf("Add64x8"); return;
+      case Iop_Sub64x8:    vex_printf("Sub64x8"); return;
+      case Iop_Add32Fx16:  vex_printf("Add32Fx16"); return;
+      case Iop_Sub32Fx16:  vex_printf("Sub32Fx16"); return;
+      case Iop_Mul32Fx16:  vex_printf("Mul32Fx16"); return;
+      case Iop_Div32Fx16:  vex_printf("Div32Fx16"); return;
+      case Iop_Add64Fx8:   vex_printf("Add64Fx8"); return;
+      case Iop_Sub64Fx8:   vex_printf("Sub64Fx8"); return;
+      case Iop_Mul64Fx8:   vex_printf("Mul64Fx8"); return;
+      case Iop_Div64Fx8:   vex_printf("Div64Fx8"); return;
+
+      case Iop_AndV512: vex_printf("AndV512"); return;
+      case Iop_OrV512:  vex_printf("OrV512"); return;
+      case Iop_XorV512: vex_printf("XorV512"); return;
+      case Iop_NotV512: vex_printf("NotV512"); return;
+
+      case Iop_Max32Sx16:  vex_printf("Max32Sx16"); return;
+      case Iop_Max32Ux16:  vex_printf("Max32Ux16"); return;
+      case Iop_Max32Fx16:  vex_printf("Max32Fx16"); return;
+      case Iop_Min32Sx16:  vex_printf("Min32Sx16"); return;
+      case Iop_Min32Ux16:  vex_printf("Min32Ux6"); return;
+      case Iop_Min32Fx16:  vex_printf("Min32Fx16"); return;
+      case Iop_Max64Sx8:   vex_printf("Max64Sx8"); return;
+      case Iop_Max64Ux8:   vex_printf("Max64Ux8"); return;
+      case Iop_Max64Fx8:   vex_printf("Max64Fx8"); return;
+      case Iop_Min64Sx8:   vex_printf("Min64Sx8"); return;
+      case Iop_Min64Ux8:   vex_printf("Min64Ux8"); return;
+      case Iop_Min64Fx8:   vex_printf("Min64Fx8"); return;
+
+      case Iop_CmpEQ32x16: vex_printf("CmpEQ32x16"); return;
+      case Iop_CmpLT32x16: vex_printf("CmpLT32x16"); return;
+      case Iop_CmpLE32x16: vex_printf("CmpLE32x16"); return;
+      case Iop_CmpEQ32Ux16:vex_printf("CmpEQ32Ux16"); return;
+      case Iop_CmpLT32Ux16:vex_printf("CmpLT32Ux16"); return;
+      case Iop_CmpLE32Ux16:vex_printf("CmpLE32Ux16"); return;
+      case Iop_Cmp32x16:   vex_printf("Cmp32x16");  return;
+      case Iop_CmpNEZ32x16:vex_printf("CmpNEZ32x16");return;
+      case Iop_CmpEQ64x8:  vex_printf("CmpEQ64x8"); return;
+      case Iop_CmpLT64x8:  vex_printf("CmpLT64x8"); return;
+      case Iop_CmpLE64x8:  vex_printf("CmpLE64x8"); return;
+      case Iop_CmpEQ64Ux8: vex_printf("CmpEQ64Ux8"); return;
+      case Iop_CmpLT64Ux8: vex_printf("CmpLT64Ux8"); return;
+      case Iop_CmpLE64Ux8: vex_printf("CmpLE64Ux8"); return;
+      case Iop_Cmp64x8:    vex_printf("Cmp64x8");   return;
+      case Iop_CmpNEZ64x8: vex_printf("CmpNEZ64x8"); return;
+
+      case Iop_Test32x16:     vex_printf("Test32x16"); return;
+      case Iop_Align32x16:    vex_printf("Align32x16"); return;
+      case Iop_Ternlog32x16:  vex_printf("Ternlog32x16"); return;
+      case Iop_Test64x8:      vex_printf("Test64x8"); return;
+      case Iop_Align64x8:     vex_printf("Align64x8"); return;
+      case Iop_Ternlog64x8:   vex_printf("Ternlog64x8");  return;
+      case Iop_Sqrt32Fx16: vex_printf("Sqrt32Fx16"); return;
+      case Iop_Sqrt64Fx8:  vex_printf("Sqrt64Fx8"); return;
+
+      case Iop_InterleaveHI32x8: vex_printf("InterleaveHI32x8"); return;
+      case Iop_InterleaveHI64x4: vex_printf("InterleaveHI64x4"); return;
+
+      case Iop_ShlN32x16:  vex_printf("ShlN32x16"); return;
+      case Iop_ShrN32x16:  vex_printf("ShrN32x16"); return;
+      case Iop_SarN32x16:  vex_printf("SarN32x16"); return;
+      case Iop_ShlN64x8:   vex_printf("ShlN64x8"); return;
+      case Iop_ShrN64x8:   vex_printf("ShrN64x8"); return;
+      case Iop_SarN64x8:   vex_printf("SarN64x8"); return;
+
+      case Iop_RotateRight32x16: vex_printf("RotateRight32x16"); return;
+      case Iop_RotateRight64x8:  vex_printf("RotateRight64x8");  return;
+      case Iop_RotateLeft32x16:  vex_printf("RotateLeft32x16");  return;
+      case Iop_RotateLeft64x8:   vex_printf("RotateLeft64x8");   return;
+      case Iop_RotateRightV32x16:vex_printf("RotateRightV32x16"); return;
+      case Iop_RotateRightV64x8: vex_printf("RotateRightV64x8");  return;
+      case Iop_RotateLeftV32x16: vex_printf("RotateLeftV32x16");  return;
+      case Iop_RotateLeftV64x8:  vex_printf("RotateLeftV64x8");   return;
+
+      case Iop_Duplicates32x16:  vex_printf("Duplicates32x16"); return;
+      case Iop_Duplicates64x8:   vex_printf("Duplicates64x8");  return;
+      case Iop_Clz32x16:   vex_printf("Clz32x16"); return;
+      case Iop_Clz64x8:    vex_printf("Clz64x8");  return;
+
+      case Iop_ExpandBitsTo32x4: vex_printf("ExpandBitsTo32x4"); return;
+      case Iop_ExpandBitsTo64x2: vex_printf("ExpandBitsTo64x2"); return;
+      case Iop_ExpandBitsTo8x16: vex_printf("ExpandBitsTo8x16"); return;
+      case Iop_ExpandBitsTo16x8: vex_printf("ExpandBitsTo16x8"); return;
+      case Iop_ExpandBitsTo16x16:vex_printf("ExpandBitsTo16x16");return;
+      case Iop_ExpandBitsTo32x8: vex_printf("ExpandBitsTo32x8"); return;
+      case Iop_ExpandBitsTo64x4: vex_printf("ExpandBitsTo64x4"); return;
+      case Iop_ExpandBitsTo32x16:vex_printf("ExpandBitsTo32x16");return;
+      case Iop_ExpandBitsTo64x8: vex_printf("ExpandBitsTo64x8"); return;
+
+      case Iop_FixupImm32:    vex_printf("FixupImm32"); return;
+      case Iop_FixupImm64:    vex_printf("FixupImm64"); return;
+      case Iop_FixupImm32x16: vex_printf("FixupImm32x16"); return;
+      case Iop_FixupImm64x8:  vex_printf("FixupImm64x8");  return;
+
+      case Iop_RoundScaleF32:    vex_printf("RoundScaleF32"); return;
+      case Iop_RoundScaleF64:    vex_printf("RoundScaleF64"); return;
+      case Iop_RoundScale32Fx16: vex_printf("RoundScale32Fx16"); return;
+      case Iop_RoundScale64Fx8:  vex_printf("RoundScale64Fx8");  return;
+      case Iop_FloatScaleF32: vex_printf("FloatScaleF32"); return;
+      case Iop_FloatScaleF64: vex_printf("FloatScaleF64"); return;
+      case Iop_ExtractExpF32:  vex_printf("ExtractExpF32");  return;
+      case Iop_ExtractExpF64:  vex_printf("ExtractExpF64");  return;
+      case Iop_ExtractExp32Fx16: vex_printf("ExtractExp32Fx16"); return;
+      case Iop_ExtractExp64Fx8:  vex_printf("ExtractExp64Fx8");  return;
+      case Iop_ExtractMantF32: vex_printf("ExtractMantF32"); return;
+      case Iop_ExtractMantF64: vex_printf("ExtractMantF64"); return;
+      case Iop_ExtractMant32Fx16: vex_printf("ExtractMant32Fx16"); return;
+      case Iop_ExtractMant64Fx8:  vex_printf("ExtractMant64Fx8");  return;
+
+      case Iop_Perm32x16:  vex_printf("Perm32x16"); return;
+      case Iop_Perm64x8:   vex_printf("Perm64x8"); return;
+      case Iop_PermI32x16: vex_printf("PermI32x16"); return;
+      case Iop_PermI64x8:  vex_printf("PermI64x8"); return;
+      case Iop_Scale32Fx16:vex_printf("Scale32Fx16");return;
+      case Iop_Scale64Fx8: vex_printf("Scale64Fx8"); return;
+
+      case Iop_Expand32x16:  vex_printf("Expand32x16"); return;
+      case Iop_Expand64x8:   vex_printf("Expand64x8"); return;
+      case Iop_Compress32x16: vex_printf("Compress32x16"); return;
+      case Iop_Compress64x8:  vex_printf("Compress64x8"); return;
+
+      case Iop_CvtF32toU32: vex_printf("CvtF32toU32"); return;
+      case Iop_CvtF64toU32: vex_printf("CvtF64toU32"); return;
+      case Iop_CvtF32toU64: vex_printf("CvtF32toU64"); return;
+      case Iop_CvtF64toU64: vex_printf("CvtF64toU64"); return;
+      case Iop_Cvt32Fx16toUDQ: vex_printf("Cvt32Fx16toUDQ"); return;
+      case Iop_Cvt64Fx8toUDQ:  vex_printf("Cvt64Fx8toUDQ");  return;
+      case Iop_CvtU32toF32: vex_printf("CvtU32toF32"); return;
+      case Iop_CvtU32toF64: vex_printf("CvtU32toF64"); return;
+      case Iop_CvtU64toF32: vex_printf("CvtU64toF32"); return;
+      case Iop_CvtU64toF64: vex_printf("CvtU64toF64"); return;
+      case Iop_CvtUDQto32Fx16: vex_printf("CvtUDQto32Fx16"); return;
+      case Iop_CvtUDQto64Fx8:  vex_printf("CvtUDQto64Fx8");  return;
+      case Iop_Cvt16Fx16to32Fx16: vex_printf("Cvt16Fx16to32Fx16"); return;
+      case Iop_Cvt32Fx16to16Fx16: vex_printf("Cvt32Fx16to16Fx16"); return;
+      case Iop_ExpEst32Fx16: vex_printf("ExpEst32Fx16"); return;
+      case Iop_ExpEst64Fx8:  vex_printf("ExpEst64Fx8");  return;
+      case Iop_32x16to8x16:    vex_printf("32x16toI8x16"); return;
+      case Iop_32Sx16to8Sx16:  vex_printf("32Sx16to8Sx16"); return;
+      case Iop_32Ux16to8Ux16:  vex_printf("32Ux16to8Ux16"); return;
+      case Iop_32x16to16x16:   vex_printf("32x16to8x16"); return;
+      case Iop_32Sx16to16Sx16: vex_printf("32Sx16to16Sx16"); return;
+      case Iop_32Ux16to16Ux16: vex_printf("32Sx16to16Ux16"); return;
+      case Iop_64x8to8x8:      vex_printf("64x8to8x8"); return;
+      case Iop_64Sx8to8Sx8:    vex_printf("64Sx8to8Sx8"); return;
+      case Iop_64Ux8to8Ux8:    vex_printf("64Ux8to8Ux8"); return;
+      case Iop_64x8to16x8:     vex_printf("64x8to16x8"); return;
+      case Iop_64Sx8to16Sx8:   vex_printf("64Sx8to16Sx8"); return;
+      case Iop_64Ux8to16Ux8:   vex_printf("64Ux8to16Ux8"); return;
+      case Iop_64x8to32x8:     vex_printf("64x8to32x8"); return;
+      case Iop_64Sx8to32Sx8:   vex_printf("64Sx8to32Sx8"); return;
+      case Iop_64Ux8to32Ux8:   vex_printf("64Ux8to32Ux8"); return;
+
+      case Iop_Recip14_32F0x4: vex_printf("Recip14_32F0x4"); return;
+      case Iop_Recip14_64F0x2: vex_printf("Recip14_64F0x2"); return;
+      case Iop_Recip14_32Fx16: vex_printf("Recip14_32Fx16"); return;
+      case Iop_Recip14_64Fx8:  vex_printf("Recip14_64Fx8"); return;
+      case Iop_Recip28_32F0x4: vex_printf("Recip28_32F0x4"); return;
+      case Iop_Recip28_64F0x2: vex_printf("Recip28_64F0x2"); return;
+      case Iop_Recip28_32Fx16: vex_printf("Recip28_32Fx16"); return;
+      case Iop_Recip28_64Fx8:  vex_printf("Recip28_64Fx8"); return;
+      case Iop_RSqrt28_32F0x4: vex_printf("RSqrt28_32F0x4"); return;
+      case Iop_RSqrt28_64F0x2: vex_printf("RSqrt28_64F0x2"); return;
+      case Iop_RSqrt28_32Fx16: vex_printf("RSqrt28_32Fx16"); return;
+      case Iop_RSqrt28_64Fx8:  vex_printf("RSqrt28_64Fx8"); return;
+
       default: vpanic("ppIROp(1)");
    }
 
@@ -1830,6 +2014,12 @@ IRConst* IRConst_V256 ( UInt con )
    IRConst* c  = LibVEX_Alloc_inline(sizeof(IRConst));
    c->tag      = Ico_V256;
    c->Ico.V256 = con;
+   return c;
+}
+IRConst* IRConst_V512 ( ULong con ) {
+   IRConst* c  = LibVEX_Alloc_inline(sizeof(IRConst));
+   c->tag      = Ico_V512;
+   c->Ico.V512 = con;
    return c;
 }
 
@@ -2894,8 +3084,13 @@ void typeOfPrimop ( IROp op,
       case Iop_NegF64: case Iop_AbsF64: 
          UNARY(Ity_F64, Ity_F64);
 
+      case Iop_ExtractExpF32:
       case Iop_NegF32: case Iop_AbsF32:
          UNARY(Ity_F32, Ity_F32);
+
+      case Iop_ExtractMantF32:
+      case Iop_RoundScaleF32:
+         BINARY(Ity_F32,Ity_I8, Ity_F32);
 
       case Iop_SqrtF64:
       case Iop_RecpExpF64:
@@ -2907,9 +3102,11 @@ void typeOfPrimop ( IROp op,
          BINARY(ity_RMode,Ity_F32, Ity_F32);
 
       case Iop_MaxNumF64: case Iop_MinNumF64:
+      case Iop_FloatScaleF64:
          BINARY(Ity_F64,Ity_F64, Ity_F64);
 
       case Iop_MaxNumF32: case Iop_MinNumF32:
+      case Iop_FloatScaleF32:
          BINARY(Ity_F32,Ity_F32, Ity_F32);
 
      case Iop_CmpF32:
@@ -2951,6 +3148,15 @@ void typeOfPrimop ( IROp op,
       case Iop_F64toF32: BINARY(ity_RMode,Ity_F64, Ity_F32);
       case Iop_F64toF16: BINARY(ity_RMode,Ity_F64, Ity_F16);
       case Iop_F32toF16: BINARY(ity_RMode,Ity_F32, Ity_F16);
+
+      case Iop_CvtF32toU32: BINARY(Ity_F32, ity_RMode, Ity_I32);
+      case Iop_CvtF32toU64: BINARY(Ity_F32, ity_RMode, Ity_I64);
+      case Iop_CvtF64toU32: BINARY(Ity_F64, ity_RMode, Ity_I32);
+      case Iop_CvtF64toU64: BINARY(Ity_F64, ity_RMode, Ity_I64);
+      case Iop_CvtU32toF32: BINARY(Ity_I32, ity_RMode, Ity_F32);
+      case Iop_CvtU32toF64: UNARY(Ity_I32, Ity_F64);
+      case Iop_CvtU64toF32: BINARY(Ity_I64, ity_RMode, Ity_F32);
+      case Iop_CvtU64toF64: BINARY(Ity_I64, ity_RMode, Ity_F64);
 
       case Iop_ReinterpI64asF64: UNARY(Ity_I64, Ity_F64);
       case Iop_ReinterpF64asI64: UNARY(Ity_F64, Ity_I64);
@@ -2995,6 +3201,15 @@ void typeOfPrimop ( IROp op,
       case Iop_RSqrtEst32Fx4:
       case Iop_RSqrtEst32Ux4:
          UNARY(Ity_V128, Ity_V128);
+
+      case Iop_32x16to8x16: case Iop_32Sx16to8Sx16: case Iop_32Ux16to8Ux16:
+      case Iop_64x8to8x8:   case Iop_64Sx8to8Sx8:   case Iop_64Ux8to8Ux8:
+      case Iop_64x8to16x8:  case Iop_64Sx8to16Sx8:  case Iop_64Ux8to16Ux8:
+         UNARY(Ity_V512, Ity_V128);
+      case Iop_32x16to16x16: case Iop_32Sx16to16Sx16: case Iop_32Ux16to16Ux16:
+      case Iop_64x8to32x8:   case Iop_64Sx8to32Sx8:   case Iop_64Ux8to32Ux8:
+      case Iop_V512toV256_1: case Iop_V512toV256_0:
+         UNARY(Ity_V512, Ity_V256);
 
       case Iop_Sqrt64Fx2:
       case Iop_Sqrt32Fx4:
@@ -3169,6 +3384,19 @@ void typeOfPrimop ( IROp op,
       case Iop_PwExtUSMulQAdd8x16:
          BINARY(Ity_V128,Ity_V128, Ity_V128);
 
+      case Iop_ExpandBitsTo32x4:
+      case Iop_ExpandBitsTo64x2:
+      case Iop_ExpandBitsTo8x16:
+      case Iop_ExpandBitsTo16x8:
+         UNARY(Ity_I64,Ity_V128);
+      case Iop_ExpandBitsTo32x8:
+      case Iop_ExpandBitsTo64x4:
+      case Iop_ExpandBitsTo16x16:
+         UNARY(Ity_I64,Ity_V256);
+      case Iop_ExpandBitsTo32x16:
+      case Iop_ExpandBitsTo64x8:
+         UNARY(Ity_I64,Ity_V512);
+
       case Iop_Perm8x16x2:
          TERNARY(Ity_V128, Ity_V128, Ity_V128, Ity_V128);
 
@@ -3211,7 +3439,22 @@ void typeOfPrimop ( IROp op,
       case Iop_Ctz8x16: case Iop_Ctz16x8:
       case Iop_Ctz32x4: case Iop_Ctz64x2:
       case Iop_BCD128toI128S:
+      case Iop_Recip14_32F0x4: case Iop_Recip14_64F0x2:
+      case Iop_Recip28_32F0x4: case Iop_Recip28_64F0x2:
+      case Iop_RSqrt28_32F0x4: case Iop_RSqrt28_64F0x2:
          UNARY(Ity_V128, Ity_V128);
+
+      case Iop_Clz32x16: case Iop_Clz64x8:
+      case Iop_Duplicates32x16: case Iop_Duplicates64x8:
+      case Iop_ExtractExp32Fx16: case Iop_ExtractExp64Fx8:
+      case Iop_CmpNEZ32x16: case Iop_CmpNEZ64x8:
+      case Iop_Sqrt64Fx8: case Iop_Sqrt32Fx16:
+      case Iop_NotV512:
+      case Iop_Recip14_32Fx16: case Iop_Recip14_64Fx8:
+      case Iop_Recip28_32Fx16: case Iop_Recip28_64Fx8:
+      case Iop_RSqrt28_32Fx16: case Iop_RSqrt28_64Fx8:
+      case Iop_ExpEst32Fx16: case Iop_ExpEst64Fx8:
+         UNARY(Ity_V512, Ity_V512);
 
       case Iop_ShlV128: case Iop_ShrV128: case Iop_SarV128:
       case Iop_ShlN8x16: case Iop_ShlN16x8: 
@@ -3293,6 +3536,12 @@ void typeOfPrimop ( IROp op,
          TERNARY(Ity_I64, Ity_I64, Ity_I8, Ity_I64);
       case Iop_SliceV128:
          TERNARY(Ity_V128, Ity_V128, Ity_I8, Ity_V128);
+
+      case Iop_FixupImm32:
+         QUATERNARY(Ity_F32,Ity_F32,Ity_I32,Ity_I8, Ity_F32);
+      case Iop_FixupImm64:
+         // src, dst, lookup, imm8,  dst
+         QUATERNARY(Ity_F64,Ity_F64,Ity_I64,Ity_I8, Ity_F64);
 
       case Iop_BCDAdd:
       case Iop_BCDSub:
@@ -3379,6 +3628,13 @@ void typeOfPrimop ( IROp op,
 
       case Iop_ExtractExpD64:
          UNARY(Ity_D64, Ity_I64);
+
+      case Iop_ExtractExpF64:
+         UNARY(Ity_F64, Ity_F64);
+
+      case Iop_ExtractMantF64:
+      case Iop_RoundScaleF64:
+         BINARY(Ity_F64, Ity_I8, Ity_F64);
 
       case Iop_ExtractSigD64:
          UNARY(Ity_D64, Ity_I64);
@@ -3565,6 +3821,12 @@ void typeOfPrimop ( IROp op,
       case Iop_V256to64_2: case Iop_V256to64_3:
          UNARY(Ity_V256, Ity_I64);
 
+      case Iop_V512to64_0: case Iop_V512to64_1:
+      case Iop_V512to64_2: case Iop_V512to64_3:
+      case Iop_V512to64_4: case Iop_V512to64_5:
+      case Iop_V512to64_6: case Iop_V512to64_7:
+         UNARY(Ity_V512, Ity_I64);
+
       case Iop_64x4toV256:
          QUATERNARY(Ity_I64, Ity_I64, Ity_I64, Ity_I64, Ity_V256);
 
@@ -3592,7 +3854,33 @@ void typeOfPrimop ( IROp op,
       case Iop_QSub8Ux32: case Iop_QSub16Ux16:
       case Iop_QSub8Sx32: case Iop_QSub16Sx16:
       case Iop_Perm32x8:
+      case Iop_InterleaveHI32x8:
+      case Iop_InterleaveHI64x4:
          BINARY(Ity_V256,Ity_V256, Ity_V256);
+
+      case Iop_CmpEQ32x16:  case Iop_CmpLT32x16:  case Iop_CmpLE32x16:
+      case Iop_CmpEQ32Ux16: case Iop_CmpLT32Ux16: case Iop_CmpLE32Ux16:
+      case Iop_CmpEQ64x8:   case Iop_CmpLT64x8:   case Iop_CmpLE64x8:
+      case Iop_CmpEQ64Ux8:  case Iop_CmpLT64Ux8:  case Iop_CmpLE64Ux8:
+      case Iop_Test32x16:  case Iop_Test64x8:
+      case Iop_Cmp64x8: case Iop_Cmp32x16:
+         TERNARY(Ity_V512,Ity_V512,Ity_I64, Ity_I64);
+
+      case Iop_Perm32x16: case Iop_Perm64x8:
+      case Iop_Scale32Fx16: case Iop_Scale64Fx8:
+      case Iop_XorV512: case Iop_OrV512: case Iop_AndV512:
+      case Iop_Add32x16: case Iop_Sub32x16:
+      case Iop_Add64x8: case Iop_Sub64x8:
+      case Iop_Mul32x16:
+      case Iop_Max32Fx16: case Iop_Min32Fx16:
+      case Iop_Max64Fx8: case Iop_Min64Fx8:
+      case Iop_Max32Sx16: case Iop_Min32Sx16:
+      case Iop_Max32Ux16: case Iop_Min32Ux16:
+      case Iop_Max64Sx8: case Iop_Min64Sx8:
+      case Iop_Max64Ux8: case Iop_Min64Ux8:
+      case Iop_RotateRightV32x16: case Iop_RotateRightV64x8:
+      case Iop_RotateLeftV32x16:  case Iop_RotateLeftV64x8:
+         BINARY(Ity_V512, Ity_V512, Ity_V512);
 
       case Iop_I32StoF32x8:
       case Iop_F32toI32Sx8:
@@ -3603,6 +3891,16 @@ void typeOfPrimop ( IROp op,
 
       case Iop_V256toV128_1: case Iop_V256toV128_0:
          UNARY(Ity_V256, Ity_V128);
+
+      case Iop_Cvt64Fx8toUDQ:
+         BINARY(Ity_V512, ity_RMode, Ity_V256);
+
+      case Iop_Cvt32Fx16to16Fx16:
+         BINARY(Ity_V512, Ity_I8, Ity_V256);
+
+      case Iop_CvtUDQto64Fx8:
+      case Iop_Cvt16Fx16to32Fx16:
+         UNARY(Ity_V256, Ity_V512);
 
       case Iop_F16toF32x8:
          UNARY(Ity_V128, Ity_V256);
@@ -3617,6 +3915,9 @@ void typeOfPrimop ( IROp op,
       case Iop_QandSQRsh32x4: case Iop_QandSQRsh64x2:
       case Iop_V128HLtoV256:
          BINARY(Ity_V128,Ity_V128, Ity_V256);
+
+      case Iop_V256HLtoV512:
+         BINARY(Ity_V256,Ity_V256, Ity_V512);
 
       case Iop_NotV256:
       case Iop_RSqrtEst32Fx8:
@@ -3637,6 +3938,35 @@ void typeOfPrimop ( IROp op,
          QUATERNARY(Ity_I32, Ity_I8, Ity_I8, Ity_I8, Ity_I32);
       case Iop_Rotx64:
          QUATERNARY(Ity_I64, Ity_I8, Ity_I8, Ity_I8, Ity_I64);
+
+      case Iop_ShlN32x16: case Iop_ShrN32x16: case Iop_SarN32x16:
+      case Iop_ShlN64x8:  case Iop_ShrN64x8: case Iop_SarN64x8:
+      case Iop_ExtractMant32Fx16: case Iop_ExtractMant64Fx8:
+      case Iop_RoundScale32Fx16:  case Iop_RoundScale64Fx8:
+      case Iop_RotateRight32x16: case Iop_RotateRight64x8:
+      case Iop_RotateLeft32x16:  case Iop_RotateLeft64x8:
+         BINARY(Ity_V512,Ity_I8, Ity_V512);
+
+      case Iop_Cvt32Fx16toUDQ: case Iop_CvtUDQto32Fx16:
+         BINARY(Ity_V512,ity_RMode, Ity_V512);
+
+      case Iop_Add64Fx8: case Iop_Sub64Fx8:
+      case Iop_Mul64Fx8: case Iop_Div64Fx8:
+      case Iop_Add32Fx16: case Iop_Sub32Fx16:
+      case Iop_Mul32Fx16: case Iop_Div32Fx16:
+         TERNARY(ity_RMode,Ity_V512,Ity_V512, Ity_V512);
+
+      case Iop_PermI32x16: case Iop_PermI64x8:
+         TERNARY(Ity_V512,Ity_V512,Ity_V512, Ity_V512);
+
+      case Iop_Align32x16:     case Iop_Align64x8:
+      case Iop_Expand32x16:    case Iop_Expand64x8:
+      case Iop_Compress32x16:  case Iop_Compress64x8:
+         TERNARY(Ity_I64,Ity_V512,Ity_V512, Ity_V512);
+
+      case Iop_Ternlog32x16: case Iop_Ternlog64x8:
+      case Iop_FixupImm32x16: case Iop_FixupImm64x8:
+         QUATERNARY(Ity_I64,Ity_V512,Ity_V512,Ity_V512, Ity_V512);
 
       default:
          ppIROp(op);
@@ -3725,6 +4055,7 @@ IRType typeOfIRConst ( const IRConst* con )
       case Ico_F64i:  return Ity_F64;
       case Ico_V128:  return Ity_V128;
       case Ico_V256:  return Ity_V256;
+      case Ico_V512:  return Ity_V512;
       default: vpanic("typeOfIRConst");
    }
 }
@@ -3806,7 +4137,7 @@ Bool isPlausibleIRType ( IRType ty )
       case Ity_I64: case Ity_I128:
       case Ity_F16: case Ity_F32: case Ity_F64: case Ity_F128:
       case Ity_D32: case Ity_D64: case Ity_D128:
-      case Ity_V128: case Ity_V256:
+      case Ity_V128: case Ity_V256: case Ity_V512:
          return True;
       default: 
          return False;
@@ -4677,13 +5008,13 @@ void tcStmt ( const IRSB* bb, const IRStmt* stmt, IRType gWordTy )
             }
             if (nVECRETs == 1) {
                /* Fn must return V128 or V256. */
-               if (retTy != Ity_V128 && retTy != Ity_V256)
+               if (retTy != Ity_V128 && retTy != Ity_V256 &&  retTy != Ity_V512)
                   sanityCheckFail(bb,stmt,
                                   "IRStmt.Dirty.args: VECRET present, "
                                   "but fn does not return V128 or V256");
             } else if (nVECRETs == 0) {
                /* Fn must not return V128 or V256 */
-               if (retTy == Ity_V128 || retTy == Ity_V256)
+               if (retTy == Ity_V128 || retTy == Ity_V256 || retTy == Ity_V512)
                   sanityCheckFail(bb,stmt,
                                   "IRStmt.Dirty.args: VECRET not present, "
                                   "but fn returns V128 or V256");
@@ -4852,6 +5183,7 @@ Int sizeofIRType ( IRType ty )
       case Ity_D128: return 16;
       case Ity_V128: return 16;
       case Ity_V256: return 32;
+      case Ity_V512: return 64;
       default: vex_printf("\n"); ppIRType(ty); vex_printf("\n");
                vpanic("sizeofIRType");
    }
