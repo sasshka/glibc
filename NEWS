@@ -88,6 +88,11 @@ Major new features:
   The latest GCC available at this time (10.2) does not support this level of
   fortification.
 
+* The function execveat has been added and it operates similar to execve.
+  The syscall is already used to implement fexecve without requiring /proc to
+  be mounted.  Similar to fexecve, if the syscall is not supported a fallback
+  which access /proc is used.
+
 Deprecated and removed features, and other changes affecting compatibility:
 
 * The mallinfo function is marked deprecated.  Callers should call

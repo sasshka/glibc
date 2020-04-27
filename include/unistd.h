@@ -192,6 +192,10 @@ extern int __libc_pause (void);
 extern int __getlogin_r_loginuid (char *name, size_t namesize)
      attribute_hidden;
 
+extern int
+__execveat_fallback (int dirfd, const char *path, char *const argv[],
+                     char *const envp[], int flags);
+
 #  if IS_IN (rtld)
 #   include <dl-unistd.h>
 #  endif

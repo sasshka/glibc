@@ -66,7 +66,8 @@ routines :=								      \
 	posix_madvise							      \
 	get_child_max sched_cpucount sched_cpualloc sched_cpufree \
 	streams-compat \
-	shm-directory
+	shm-directory                                                         \
+	execveat
 
 aux		:= init-posix environ
 tests		:= test-errno tstgetopt testfnm runtests runptests \
@@ -118,6 +119,7 @@ endif
 
 tests-internal	:= bug-regex5 bug-regex20 bug-regex33 \
 		   tst-rfc3484 tst-rfc3484-2 tst-rfc3484-3
+tests-static-internal += tst-execveat-compat
 tests-container := bug-ga2
 xtests		:= tst-getaddrinfo4 tst-getaddrinfo5 tst-sched_rr_get_interval
 ifeq (yes,$(build-shared))
