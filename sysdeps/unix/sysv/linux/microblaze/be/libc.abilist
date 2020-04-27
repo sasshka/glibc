@@ -2142,3 +2142,4 @@ GLIBC_2.31 msgctl F
 GLIBC_2.31 semctl F
 GLIBC_2.31 shmctl F
 GLIBC_2.32 pthread_sigmask F
+GLIBC_2.32 execveat F

@@ -2139,3 +2139,4 @@ GLIBC_2.30 gettid F
 GLIBC_2.30 tgkill F
 GLIBC_2.30 twalk_r F
 GLIBC_2.32 pthread_sigmask F
+GLIBC_2.32 execveat F

@@ -96,7 +96,7 @@ tests += tst-clone tst-clone2 tst-clone3 tst-fanotify tst-personality \
 	 tst-quota tst-sync_file_range tst-sysconf-iov_max tst-ttyname \
 	 test-errno-linux tst-memfd_create tst-mlock2 tst-pkey \
 	 tst-rlimit-infinity tst-ofdlocks tst-gettid tst-gettid-kill \
-	 tst-tgkill
+	 tst-tgkill tst-execveat
 tests-internal += tst-ofdlocks-compat tst-sigcontext-get_pc
 
 CFLAGS-tst-sigcontext-get_pc.c = -fasynchronous-unwind-tables
@@ -228,7 +228,7 @@ endif
 ifeq ($(subdir),posix)
 sysdep_headers += bits/initspin.h
 
-sysdep_routines += sched_getcpu oldglob getcpu
+sysdep_routines += sched_getcpu oldglob getcpu execveat
 
 tests += tst-affinity tst-affinity-pid
 

@@ -33,4 +33,9 @@
    not detached and has not been joined.  */
 extern __pid_t gettid (void) __THROW;
 
+/* Execute program relative to a directory file descriptor.  */
+     extern int execveat (int __fd, const char *__path, char *const __argv[],
+                          char *const __envp[], int __flags)
+     __THROW __nonnull ((2, 3));
+
 #endif
