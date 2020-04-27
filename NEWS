@@ -18,6 +18,11 @@ Major new features:
   a dump of information related to IFUNC resolver operation and
   glibc-hwcaps subdirectory selection.
 
+* The function execveat has been added and it operates similar to execve.
+  The syscall is already used to implement fexecve without requiring /proc to
+  be mounted.  Similar to fexecve, if the syscall is not supported ENOSYS is
+  returned.
+
 Deprecated and removed features, and other changes affecting compatibility:
 
   [Add deprecations, removals and changes affecting compatibility here]
