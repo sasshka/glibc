@@ -2102,6 +2102,7 @@ GLIBC_2.30 getdents64 F
 GLIBC_2.30 gettid F
 GLIBC_2.30 tgkill F
 GLIBC_2.30 twalk_r F
+GLIBC_2.32 execveat F
 GLIBC_2.32 pthread_sigmask F
 GLIBC_2.4 __confstr_chk F
 GLIBC_2.4 __fgets_chk F
