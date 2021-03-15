@@ -771,7 +771,8 @@ endif
 	     $(patsubst %.o,%.d,$(filter %.o,$(extra-objs:.os=.o))) \
 	     $(patsubst %.oS,%.d,$(filter %.oS,$(extra-objs))) \
 	     $(patsubst %.o,%.d,$(filter %.o,$(extra-test-objs:.os=.o))) \
-	     $(addsuffix .d,$(tests) $(tests-internal) $(xtests) $(test-srcs))
+	     $(addsuffix .d,$(tests) $(tests-internal) \
+	       $(tests-internal-static)  $(xtests) $(test-srcs))
 ifeq ($(build-programs),yes)
 +depfiles += $(addsuffix .d,$(others) $(sysdep-others))
 endif
@@ -1297,8 +1298,8 @@ lib := testsuite
 include $(patsubst %,$(..)libof-iterator.mk,$(cpp-srcs-left))
 endif
 
-all-nonlib := $(strip $(tests-internal) $(test-internal-extras) \
-		      $(others) $(others-extras))
+all-nonlib := $(strip $(tests-internal) $(tests-internal-static) \
+		  $(test-internal-extras) $(others) $(others-extras))
 ifneq (,$(all-nonlib))
 cpp-srcs-left = $(all-nonlib)
 lib := nonlib
@@ -1457,10 +1458,12 @@ mostlyclean: common-mostlyclean
 do-tests-clean:
 	-rm -f $(addprefix $(objpfx),$(addsuffix .out,$(tests) \
 						      $(tests-internal) \
+						      $(tests-internal-static) \
 						      $(xtests) \
 						      $(test-srcs)) \
 				     $(addsuffix .test-result,$(tests) \
 							      $(tests-internal) \
+							      $(tests-internal-static) \
 							      $(xtests) \
 							      $(test-srcs)))
 
@@ -1471,16 +1474,19 @@ common-mostlyclean:
 				     $(others) $(sysdep-others) stubs \
 				     $(addsuffix .o,$(tests) \
 						    $(tests-internal) \
+						    $(tests-internal-static) \
 						    $(xtests) \
 						    $(test-srcs) \
 						    $(others) \
 						    $(sysdep-others)) \
 				     $(addsuffix .out,$(tests) \
 						      $(tests-internal) \
+						      $(tests-internal-static) \
 						      $(xtests) \
 						      $(test-srcs)) \
 				     $(addsuffix .test-result,$(tests) \
 							      $(tests-internal) \
+							      $(tests-internal-static) \
 							      $(xtests) \
 							      $(test-srcs)))
 	-rm -f $(addprefix $(objpfx),$(extra-objs) $(extra-test-objs) \

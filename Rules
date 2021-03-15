@@ -179,11 +179,12 @@ xtests:
 
 ifeq ($(build-programs),yes)
 binaries-all-notests = $(others) $(sysdep-others)
-binaries-all-tests = $(tests) $(tests-internal) $(xtests) $(test-srcs) \
-		     $(tests-container)
+binaries-all-tests = $(tests) $(tests-internal) $(tests-internal-static) \
+  $(xtests) $(test-srcs) $(tests-container)
 binaries-all = $(binaries-all-notests) $(binaries-all-tests)
 binaries-static-notests = $(others-static)
-binaries-static-tests = $(tests-static) $(xtests-static)
+binaries-static-tests = \
+  $(tests-static) $(tests-internal-static) $(xtests-static)
 binaries-static = $(binaries-static-notests) $(binaries-static-tests)
 ifeq (yesyes,$(have-fpie)$(build-shared))
 binaries-pie-tests = $(tests-pie) $(xtests-pie)
@@ -195,7 +196,8 @@ endif
 binaries-mcheck-tests = $(tests-mcheck:%=%-mcheck)
 else
 binaries-all-notests =
-binaries-all-tests = $(tests) $(tests-internal) $(xtests) $(test-srcs)
+binaries-all-tests = $(tests) $(tests-internal) $(tests-internal-static) \
+  $(xtests) $(test-srcs)
 binaries-all = $(binaries-all-tests)
 binaries-static-notests =
 binaries-static-tests =

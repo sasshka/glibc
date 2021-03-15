@@ -732,11 +732,11 @@ $(subst $(empty) ,:,$(strip $(patsubst -Wl$(comma)-rpath-link=%, %,\
 # $(run-via-rtld-prefix) is a command that, when prepended to the name
 # of a program built with the newly built library, produces a command
 # that, executed on the host for which the library is built, runs that
-# program.  For tests listed in tests-static or xtests-static, it is
-# empty.
+# program.  For tests listed in binaries-static-tests (from
+# tests-static, xtests-static, tests-internal-static), it is empty.
 run-via-rtld-prefix =							      \
   $(if $(strip $(filter $(notdir $(built-program-file)),		      \
-			$(tests-static) $(xtests-static))),, $(rtld-prefix))
+			$(binaries-static-tests))),, $(rtld-prefix))
 else
 run-via-rtld-prefix =
 endif
