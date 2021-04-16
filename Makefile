@@ -151,6 +151,9 @@ Usage: $$0 [OPTIONS] <program> [ARGUMENTS...]
                container. The container will run within support/test-container.
 EOF
 
+  echo "usage: $$0 [--tool=strace] PROGRAM [ARGUMENTS...]" 2>&1
+  echo "       $$0 --tool=valgrind PROGRAM [ARGUMENTS...]" 2>&1
+  echo "       $$0 --tool=valgrind-test PROGRAM [ARGUMENTS...]" 2>&1
   exit 1
 }
 
@@ -185,6 +188,9 @@ case "$$toolname" in
     ;;
   valgrind)
     exec env $(run-program-env) valgrind $(test-via-rtld-prefix) $${1+"$$@"}
+    ;;
+  valgrind-test)
+    exec env $(run-program-env) valgrind -q --error-exitcode=1 $(test-via-rtld-prefix) $${1+"$$@"}
     ;;
   container)
     exec env $(run-program-env) $(test-via-rtld-prefix) \

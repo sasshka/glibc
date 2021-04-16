@@ -25,7 +25,7 @@ headers		= elf.h bits/elfclass.h link.h bits/link.h
 routines	= $(all-dl-routines) dl-support dl-iteratephdr \
 		  dl-addr dl-addr-obj enbl-secure dl-profstub \
 		  dl-origin dl-libc dl-sym dl-sysdep dl-error \
-		  dl-reloc-static-pie libc_early_init rtld_static_init
+		  dl-reloc-static-pie libc_early_init rtld_static_init tst-valgrind-smoke
 
 # The core dynamic linking functions are in libc for the static and
 # profiled libraries.
@@ -47,6 +47,13 @@ CPPFLAGS-dl-tunables.c += -DTUNABLES_FRONTEND=$(tunables-type)
 
 ifeq (yesyes,$(build-shared)$(run-built-tests))
 tests-special += $(objpfx)list-tunables.out
+endif
+
+# Run smoke tests with valgrind to verify dynamic loader
+ifneq ($(VALGRIND),false)
+tests-special += $(objpfx)valgrind-smoke-test.out
+$(objpfx)valgrind-smoke-test.out: $(objpfx)ld.so
+	$(common-objpfx)testrun.sh --tool=valgrind-test ./tst-valgrind-smoke  > $@
 endif
 
 # Make sure that the compiler does not insert any library calls in tunables
